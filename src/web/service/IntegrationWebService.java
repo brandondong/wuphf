@@ -7,8 +7,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import web.model.IntegrationResource;
-import web.model.PlatformResource;
+import web.model.IntegrationWebModel;
+import web.model.PlatformWebModel;
 
 /**
  * Service for handling platform and integration related web requests
@@ -21,14 +21,14 @@ public class IntegrationWebService {
 	@GET
 	@Path("/platforms")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<PlatformResource> getAllPlatforms() {
+	public List<PlatformWebModel> getAllPlatforms() {
 		return service.getAllPlatforms();
 	}
 
 	@GET
 	@Path("/integrations")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<IntegrationResource> getAllIntegrations() {
+	public List<IntegrationWebModel> getAllIntegrations() {
 		return service.getAllIntegrations();
 	}
 

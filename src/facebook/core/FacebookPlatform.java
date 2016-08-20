@@ -1,12 +1,12 @@
 package facebook.core;
 
-import core.model.Platform;
+import core.model.AbstractPlatform;
 
-public class FacebookPlatform implements Platform {
+public class FacebookPlatform extends AbstractPlatform {
 
 	@Override
 	public String getLabel() {
-		return "Facebook";
+		return "facebook";
 	}
 
 }
