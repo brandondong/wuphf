@@ -9,6 +9,18 @@ public interface Integration {
 	 */
 	String getId();
 
+	/**
+	 * 
+	 * @return the {@link Platform} the integration belongs to
+	 */
 	Platform getPlatform();
+
+	/**
+	 * Posts a status message
+	 * 
+	 * @param message
+	 *            the status to post
+	 */
+	void post(String message);
 
 }

@@ -3,10 +3,12 @@ package web.service;
 import java.util.List;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import web.core.IntegrationService;
 import web.model.IntegrationWebModel;
 import web.model.PlatformWebModel;
 
@@ -30,6 +32,12 @@ public class IntegrationWebService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<IntegrationWebModel> getAllIntegrations() {
 		return service.getAllIntegrations();
+	}
+
+	@POST
+	@Path("/post")
+	public void postMessage(String message) {
+		service.postMessage(message);
 	}
 
 }

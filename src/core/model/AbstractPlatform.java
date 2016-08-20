@@ -6,10 +6,14 @@ public abstract class AbstractPlatform implements Platform {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((getLabel() == null) ? 0 : getLabel().hashCode());
+		result = prime * result + getClass().hashCode();
 		return result;
 	}
 
+	/**
+	 * Since platforms are stateless, two platforms equal iff they are the same
+	 * class
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -17,12 +21,6 @@ public abstract class AbstractPlatform implements Platform {
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
-			return false;
-		AbstractPlatform other = (AbstractPlatform) obj;
-		if (getLabel() == null) {
-			if (other.getLabel() != null)
-				return false;
-		} else if (!getLabel().equals(other.getLabel()))
 			return false;
 		return true;
 	}

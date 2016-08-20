@@ -1,5 +1,6 @@
 package core.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -15,6 +16,8 @@ public class IntegrationManager {
 
 	private static final IntegrationManager instance = new IntegrationManager();
 
+	private final List<Integration> integrations = new ArrayList<>();
+
 	private IntegrationManager() {
 	}
 
@@ -28,6 +31,10 @@ public class IntegrationManager {
 	 */
 	public List<Platform> getAllPlatforms() {
 		return PLATFORMS;
+	}
+
+	public List<Integration> getAllIntegrations() {
+		return integrations;
 	}
 
 }
