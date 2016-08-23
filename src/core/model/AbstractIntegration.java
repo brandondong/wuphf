@@ -1,13 +1,20 @@
 package core.model;
 
+import java.util.Optional;
+
+import core.schema.FieldValueMap;
+
 public abstract class AbstractIntegration implements Integration {
 
 	private final String id;
 
+	private final Optional<String> label;
+
 	private final Platform platform;
 
-	public AbstractIntegration(String id, Platform platform) {
+	public AbstractIntegration(String id, Optional<String> label, Platform platform) {
 		this.id = id;
+		this.label = label;
 		this.platform = platform;
 	}
 
@@ -17,8 +24,18 @@ public abstract class AbstractIntegration implements Integration {
 	}
 
 	@Override
+	public Optional<String> getLabel() {
+		return label;
+	}
+
+	@Override
 	public Platform getPlatform() {
 		return platform;
+	}
+
+	@Override
+	public void setValueMap(FieldValueMap fieldValueMap) {
+
 	}
 
 	@Override

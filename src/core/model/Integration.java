@@ -1,5 +1,9 @@
 package core.model;
 
+import java.util.Optional;
+
+import core.schema.FieldValueMap;
+
 public interface Integration {
 
 	/**
@@ -8,6 +12,8 @@ public interface Integration {
 	 *         username)
 	 */
 	String getId();
+
+	Optional<String> getLabel();
 
 	/**
 	 * 
@@ -22,5 +28,7 @@ public interface Integration {
 	 *            the status to post
 	 */
 	void post(String message);
+
+	void setValueMap(FieldValueMap fieldValueMap);
 
 }

@@ -4,7 +4,14 @@ import core.model.Platform;
 
 public class PlatformWebModel {
 
-	private final String label;
+	private String label;
+
+	/**
+	 * Public constructor for JAXB, use {{@link #createFrom(Platform)} to
+	 * instantiate instead
+	 */
+	public PlatformWebModel() {
+	}
 
 	private PlatformWebModel(String label) {
 		this.label = label;
@@ -22,6 +29,10 @@ public class PlatformWebModel {
 
 	public String getLabel() {
 		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 }

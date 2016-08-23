@@ -40,4 +40,10 @@ public class IntegrationWebService {
 		service.postMessage(message);
 	}
 
+	@POST
+	@Path("/create")
+	public void createOrEditIntegration(IntegrationWebModel integration) {
+		service.createOrEditIntegration(integration);
+	}
+
 }

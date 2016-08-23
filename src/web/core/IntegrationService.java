@@ -1,9 +1,12 @@
 package web.core;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import core.model.IntegrationManager;
+import core.model.Platform;
+import core.schema.FieldValueMap;
 import web.model.IntegrationWebModel;
 import web.model.PlatformWebModel;
 
@@ -27,8 +30,21 @@ public class IntegrationService {
 				.collect(Collectors.toList());
 	}
 
+	/**
+	 * Posts a status message on all configured integrations
+	 * 
+	 * @param message
+	 *            the message to be posted
+	 */
 	public void postMessage(String message) {
 		IntegrationManager.instance().getAllIntegrations().forEach(i -> i.post(message));
+	}
+
+	public void createOrEditIntegration(IntegrationWebModel integration) {
+		Platform platform = IntegrationManager.instance().getPlatformByLabel(integration.getPlatform().getLabel());
+		FieldValueMap map = FieldValueMap.createWith(platform.getFields(), integration.getValueMap());
+		IntegrationManager.instance().createOrEditIntegration(Optional.ofNullable(integration.getLabel()), platform,
+				map);
 	}
 
 }
