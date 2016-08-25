@@ -32,6 +32,10 @@ public class FieldValueMap {
 		return valueMap.get(field);
 	}
 
+	public String getIdValue() {
+		return getValueForField(fields.getIdField());
+	}
+
 	public Fields getFields() {
 		return fields;
 	}

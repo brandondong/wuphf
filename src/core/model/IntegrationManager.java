@@ -1,10 +1,12 @@
 package core.model;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static java.util.stream.Collectors.toMap;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 
@@ -25,7 +27,7 @@ public class IntegrationManager {
 	private final Map<String, Platform> platformByLabel;
 
 	private IntegrationManager() {
-		platformByLabel = PLATFORMS.stream().collect(Collectors.toMap(p -> p.getLabel(), p -> p));
+		platformByLabel = PLATFORMS.stream().collect(toMap(p -> p.getLabel(), p -> p));
 	}
 
 	public static IntegrationManager instance() {
@@ -45,16 +47,17 @@ public class IntegrationManager {
 	}
 
 	public void createOrEditIntegration(Optional<String> label, Platform platform, FieldValueMap map) {
-		String integrationId = map.getFields().getIdField().getLabel();
-		Optional<Integration> integration = getExistingIntegration(integrationId, platform);
+		Optional<Integration> integration = getExistingIntegration(map.getIdValue(), platform);
 		if (integration.isPresent()) {
-			integration.get().setValueMap(map);
+			integration.get().updateValueMap(map);
 		} else {
-
+			integrations.add(platform.createIntegration(label, map));
 		}
 	}
 
 	public Platform getPlatformByLabel(String platformLabel) {
+		checkArgument(platformByLabel.containsKey(platformLabel),
+				String.format("No platform found with label %s.", platformLabel));
 		return platformByLabel.get(platformLabel);
 	}
 

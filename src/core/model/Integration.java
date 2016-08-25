@@ -29,6 +29,8 @@ public interface Integration {
 	 */
 	void post(String message);
 
-	void setValueMap(FieldValueMap fieldValueMap);
+	void updateValueMap(FieldValueMap fieldValueMap);
+
+	FieldValueMap getFieldValueMap();
 
 }

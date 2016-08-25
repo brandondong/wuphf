@@ -3,10 +3,11 @@ package core.schema;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-public class Fields {
+public class Fields implements Iterable<Field> {
 
 	private final List<Field> fields;
 
@@ -31,6 +32,11 @@ public class Fields {
 
 	public int size() {
 		return fields.size();
+	}
+
+	@Override
+	public Iterator<Field> iterator() {
+		return fields.iterator();
 	}
 
 }
