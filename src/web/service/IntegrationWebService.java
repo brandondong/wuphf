@@ -9,6 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import web.core.IntegrationService;
+import web.message.MessageIntegrationWrapper;
 import web.model.IntegrationWebModel;
 import web.model.PlatformWebModel;
 
@@ -36,7 +37,7 @@ public class IntegrationWebService {
 
 	@POST
 	@Path("/post")
-	public void postMessage(String message) {
+	public void postMessage(MessageIntegrationWrapper message) {
 		service.postMessage(message);
 	}
 

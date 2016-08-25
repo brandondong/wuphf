@@ -9,6 +9,7 @@ import java.util.Map;
 import core.model.IntegrationManager;
 import core.model.Platform;
 import core.schema.FieldValueMap;
+import web.message.MessageIntegrationWrapper;
 import web.model.IntegrationWebModel;
 import web.model.PlatformWebModel;
 import web.schema.FieldWebModel;
@@ -39,8 +40,9 @@ public class IntegrationService {
 	 * @param message
 	 *            the message to be posted
 	 */
-	public void postMessage(String message) {
-		IntegrationManager.instance().getAllIntegrations().forEach(i -> i.post(message));
+	public void postMessage(MessageIntegrationWrapper message) {
+		IntegrationManager.instance().getAllIntegrations().stream().filter(message::contains)
+				.forEach(i -> i.post(message.getMessage()));
 	}
 
 	public void createOrEditIntegration(IntegrationWebModel integration) {
