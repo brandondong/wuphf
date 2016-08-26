@@ -3,11 +3,11 @@ package core.schema;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
-public class Fields implements Iterable<Field> {
+public class Fields {
 
 	private final List<Field> fields;
 
@@ -30,13 +30,8 @@ public class Fields implements Iterable<Field> {
 		return fields.stream().filter(f -> f.getLabel().equals(label)).findAny();
 	}
 
-	public int size() {
-		return fields.size();
-	}
-
-	@Override
-	public Iterator<Field> iterator() {
-		return fields.iterator();
+	public Stream<Field> stream() {
+		return fields.stream();
 	}
 
 }

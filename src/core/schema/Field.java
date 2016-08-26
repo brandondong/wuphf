@@ -10,10 +10,13 @@ public class Field {
 
 	private final boolean idField;
 
-	private Field(String label, Optional<String> description, boolean idField) {
+	private final boolean secret;
+
+	private Field(String label, Optional<String> description, boolean idField, boolean secret) {
 		this.label = label;
 		this.description = description;
 		this.idField = idField;
+		this.secret = secret;
 	}
 
 	public String getLabel() {
@@ -26,6 +29,10 @@ public class Field {
 
 	public boolean isIdField() {
 		return idField;
+	}
+
+	public boolean isSecret() {
+		return secret;
 	}
 
 	public static Builder builder(String label) {
@@ -65,6 +72,8 @@ public class Field {
 
 		private boolean idField = false;
 
+		private boolean secret = false;
+
 		private Builder(String label) {
 			this.label = label;
 		}
@@ -79,8 +88,13 @@ public class Field {
 			return this;
 		}
 
+		public Builder secret() {
+			secret = true;
+			return this;
+		}
+
 		public Field create() {
-			return new Field(label, description, idField);
+			return new Field(label, description, idField, secret);
 		}
 	}
 

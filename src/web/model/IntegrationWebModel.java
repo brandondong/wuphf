@@ -1,11 +1,11 @@
 package web.model;
 
-import java.util.HashMap;
+import static java.util.stream.Collectors.toMap;
+
 import java.util.Map;
 import java.util.Optional;
 
 import core.model.Integration;
-import core.schema.Field;
 import core.schema.FieldValueMap;
 import web.schema.FieldWebModel;
 
@@ -40,11 +40,8 @@ public class IntegrationWebModel {
 	}
 
 	private static Map<FieldWebModel, String> createValueMap(FieldValueMap fieldValueMap) {
-		Map<FieldWebModel, String> map = new HashMap<>();
-		for (Field field : fieldValueMap.getFields()) {
-			map.put(FieldWebModel.createFrom(field), fieldValueMap.getValueForField(field));
-		}
-		return map;
+		return fieldValueMap.getFields().stream()
+				.collect(toMap(FieldWebModel::createFrom, fieldValueMap::getValueForField));
 	}
 
 	public Optional<String> getIntegrationLabel() {

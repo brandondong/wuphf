@@ -14,7 +14,7 @@ public class FieldValueMap {
 
 	private FieldValueMap(Fields fields, Map<String, String> values) {
 		this.fields = fields;
-		checkArgument(fields.size() == values.size(), "Integration properties do not match platform fields.");
+		checkArgument(fields.stream().count() == values.size(), "Integration properties do not match platform fields.");
 		for (String label : values.keySet()) {
 			Optional<Field> field = fields.getFieldByLabel(label);
 			checkArgument(field.isPresent(), String.format("No matching platform field found with label %s.", label));

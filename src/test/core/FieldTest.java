@@ -16,6 +16,7 @@ public class FieldTest {
 		assertEquals("mock", field.getLabel());
 		assertFalse(field.getDescription().isPresent());
 		assertFalse(field.isIdField());
+		assertFalse(field.isSecret());
 	}
 
 	@Test
@@ -28,9 +29,10 @@ public class FieldTest {
 
 	@Test
 	public void createIdField() {
-		Field field = Field.builder("mock").id().create();
+		Field field = Field.builder("mock").id().secret().create();
 		assertEquals("mock", field.getLabel());
 		assertTrue(field.isIdField());
+		assertTrue(field.isSecret());
 	}
 
 	@Test
