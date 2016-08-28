@@ -24,6 +24,8 @@ public class MockPlatform extends AbstractPlatform {
 	public static final Field PASSWORD_FIELD = Field.builder(PASSWORD_LABEL).description("a mock password field")
 			.create();
 
+	public static final String LOGO_LINK = "not a valid image.png";
+
 	@Override
 	public String getLabel() {
 		return LABEL;
@@ -38,6 +40,11 @@ public class MockPlatform extends AbstractPlatform {
 	@Override
 	public Integration createIntegration(Optional<String> label, FieldValueMap fieldValueMap) {
 		return MockIntegration.create(fieldValueMap.getIdValue());
+	}
+
+	@Override
+	public String getLogoImageLink() {
+		return LOGO_LINK;
 	}
 
 }

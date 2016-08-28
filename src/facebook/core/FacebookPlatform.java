@@ -25,4 +25,9 @@ public class FacebookPlatform extends AbstractPlatform {
 		return new FacebookIntegration(label, fieldValueMap);
 	}
 
+	@Override
+	public String getLogoImageLink() {
+		return "facebook-logo.png";
+	}
+
 }

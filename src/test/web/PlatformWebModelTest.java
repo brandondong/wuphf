@@ -13,6 +13,7 @@ public class PlatformWebModelTest {
 	public void testConvert() {
 		PlatformWebModel model = PlatformWebModel.createFrom(new MockPlatform());
 		assertEquals(MockPlatform.LABEL, model.getLabel());
+		assertEquals(MockPlatform.LOGO_LINK, model.getLogoImageLink());
 	}
 
 }

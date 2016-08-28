@@ -22,6 +22,16 @@ public interface Platform {
 	 */
 	Fields getFields();
 
+	/**
+	 * 
+	 * @param label
+	 *            an optional label identifying the integration
+	 * @param fieldValueMap
+	 *            properties of the integration to be created
+	 * @return a new {@link Integration} for this platform
+	 */
 	Integration createIntegration(Optional<String> label, FieldValueMap fieldValueMap);
+
+	String getLogoImageLink();
 
 }
