@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
         <script src="platformController.js"></script>
+        <script src="integrationService.js"></script>
     </head>
     <body ng-app="wuphf" ng-controller="platformCtrl">
 	    <nav class="navbar navbar-inverse">
@@ -21,10 +22,11 @@
 		  	</div>
 		</nav>
         <div class="container">
+        	<div ng-repeat="p in platforms">{{p.label}}</div>
 			<div class="jumbotron">
 				<h1>wuphf</h1>
 			</div>
-            <h3>Just a temporary html file. {{title}}</h3>
+            <h3>Here is the raw json output from the REST service: {{platforms}}</h3>
         </div>
     </body>
 </html>

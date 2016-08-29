@@ -1,3 +1,5 @@
-angular.module("wuphf", []).controller("platformCtrl", function($scope) {
-	$scope.title = "wuphf!";
+angular.module("wuphf", []).controller("platformCtrl", function($scope, $http) {
+	integrationService.platforms($http, function(platforms) {
+		$scope.platforms = platforms;
+	});
 });

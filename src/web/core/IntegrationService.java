@@ -51,11 +51,6 @@ public class IntegrationService {
 		IntegrationManager.instance().createOrEditIntegration(integration.getIntegrationLabel(), platform, map);
 	}
 
-	public List<FieldWebModel> getFields(String platformLabel) {
-		Platform platform = IntegrationManager.instance().getPlatformByLabel(platformLabel);
-		return platform.getFields().stream().map(FieldWebModel::createFrom).collect(toList());
-	}
-
 	private Map<String, String> convertToMap(Map<FieldWebModel, String> valueMap) {
 		return valueMap.keySet().stream().collect(toMap(f -> f.getLabel(), f -> valueMap.get(f)));
 	}
