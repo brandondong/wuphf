@@ -22,11 +22,11 @@
 		  	</div>
 		</nav>
         <div class="container">
-        	<div ng-repeat="p in platforms">{{p.label}}</div>
-			<div class="jumbotron">
-				<h1>wuphf</h1>
+        	<h2>Select a platform</h2>
+        	<div ng-repeat="p in platforms">
+        		<img src="images/{{p.logo}}" ng-click="select(p)" class="img-rounded" alt={{p.label}} width="64" height="64">
 			</div>
-            <h3>Here is the raw json output from the REST service: {{platforms}}</h3>
+			<button type="button" class="btn btn-primary btn-lg pull-right" ng-disabled="selected==null">Create Integration</button>
         </div>
     </body>
 </html>

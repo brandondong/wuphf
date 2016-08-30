@@ -11,7 +11,7 @@ public class PlatformWebModel {
 
 	private String label;
 
-	private String logoImageLink;
+	private String logo;
 
 	private List<FieldWebModel> fields;
 
@@ -22,9 +22,9 @@ public class PlatformWebModel {
 	public PlatformWebModel() {
 	}
 
-	private PlatformWebModel(String label, String logoImageLink, List<FieldWebModel> fields) {
+	private PlatformWebModel(String label, String logo, List<FieldWebModel> fields) {
 		this.label = label;
-		this.setLogoImageLink(logoImageLink);
+		this.logo = logo;
 		this.fields = fields;
 	}
 
@@ -47,12 +47,12 @@ public class PlatformWebModel {
 		this.label = label;
 	}
 
-	public String getLogoImageLink() {
-		return logoImageLink;
+	public String getLogo() {
+		return logo;
 	}
 
-	public void setLogoImageLink(String logoImageLink) {
-		this.logoImageLink = logoImageLink;
+	public void setLogo(String logo) {
+		this.logo = logo;
 	}
 
 	public List<FieldWebModel> getFields() {
