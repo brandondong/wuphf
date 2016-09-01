@@ -49,7 +49,7 @@ public class IntegrationManager {
 	public void createOrEditIntegration(Optional<String> label, Platform platform, FieldValueMap map) {
 		Optional<Integration> integration = getExistingIntegration(map.getIdValue(), platform);
 		if (integration.isPresent()) {
-			integration.get().updateValueMap(map);
+			integration.get().setValueMap(map);
 		} else {
 			integrations.add(platform.createIntegration(label, map));
 		}

@@ -29,7 +29,7 @@ public interface Integration {
 	 */
 	void post(String message);
 
-	void updateValueMap(FieldValueMap fieldValueMap);
+	void setValueMap(FieldValueMap fieldValueMap);
 
 	FieldValueMap getFieldValueMap();
 

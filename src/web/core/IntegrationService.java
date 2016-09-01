@@ -1,7 +1,6 @@
 package web.core;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 import java.util.List;
 import java.util.Map;
@@ -9,6 +8,7 @@ import java.util.Map;
 import core.model.IntegrationManager;
 import core.model.Platform;
 import core.schema.FieldValueMap;
+import core.schema.Fields;
 import web.message.MessageIntegrationWrapper;
 import web.model.IntegrationWebModel;
 import web.model.PlatformWebModel;
@@ -47,12 +47,14 @@ public class IntegrationService {
 
 	public void createOrEditIntegration(IntegrationWebModel integration) {
 		Platform platform = IntegrationManager.instance().getPlatformByLabel(integration.getPlatform().getLabel());
-		FieldValueMap map = FieldValueMap.createWith(platform.getFields(), convertToMap(integration.getValueMap()));
+		FieldValueMap map = createFieldValueMap(platform.getFields(), integration.getValueMap());
 		IntegrationManager.instance().createOrEditIntegration(integration.getIntegrationLabel(), platform, map);
 	}
 
-	private Map<String, String> convertToMap(Map<FieldWebModel, String> valueMap) {
-		return valueMap.keySet().stream().collect(toMap(f -> f.getLabel(), f -> valueMap.get(f)));
+	private FieldValueMap createFieldValueMap(Fields fields, Map<FieldWebModel, String> valueMap) {
+		FieldValueMap.Builder builder = FieldValueMap.builder(fields);
+		valueMap.keySet().forEach(f -> builder.setField(f.getLabel(), valueMap.get(f)));
+		return builder.create();
 	}
 
 }

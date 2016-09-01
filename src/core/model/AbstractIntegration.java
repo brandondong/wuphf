@@ -37,7 +37,7 @@ public abstract class AbstractIntegration implements Integration {
 	}
 
 	@Override
-	public void updateValueMap(FieldValueMap fieldValueMap) {
+	public void setValueMap(FieldValueMap fieldValueMap) {
 		this.fieldValueMap = fieldValueMap;
 	}
 

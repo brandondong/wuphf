@@ -1,6 +1,7 @@
 package core.schema;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,20 +11,13 @@ public class FieldValueMap {
 
 	private final Fields fields;
 
-	private final Map<Field, String> valueMap = new HashMap<>();
+	private final Map<Field, String> valueMap;
 
-	private FieldValueMap(Fields fields, Map<String, String> values) {
+	private FieldValueMap(Fields fields, Map<Field, String> valueMap) {
 		this.fields = fields;
-		checkArgument(fields.stream().count() == values.size(), "Integration properties do not match platform fields.");
-		for (String label : values.keySet()) {
-			Optional<Field> field = fields.getFieldByLabel(label);
-			checkArgument(field.isPresent(), String.format("No matching platform field found with label %s.", label));
-			valueMap.put(field.get(), values.get(label));
-		}
-	}
-
-	public static FieldValueMap createWith(Fields fields, Map<String, String> values) {
-		return new FieldValueMap(fields, values);
+		this.valueMap = valueMap;
+		fields.stream().forEach(f -> checkState(valueMap.containsKey(f),
+				String.format("Value must be set for %s field.", f.getLabel())));
 	}
 
 	public String getValueForField(Field field) {
@@ -38,6 +32,32 @@ public class FieldValueMap {
 
 	public Fields getFields() {
 		return fields;
+	}
+
+	public static Builder builder(Fields fields) {
+		return new Builder(fields);
+	}
+
+	public static class Builder {
+
+		private final Fields fields;
+
+		private final Map<Field, String> valueMap = new HashMap<>();
+
+		private Builder(Fields fields) {
+			this.fields = fields;
+		}
+
+		public Builder setField(String label, String value) {
+			Optional<Field> field = fields.getFieldByLabel(label);
+			checkArgument(field.isPresent(), String.format("No matching platform field found with label %s.", label));
+			valueMap.put(field.get(), value);
+			return this;
+		}
+
+		public FieldValueMap create() {
+			return new FieldValueMap(fields, valueMap);
+		}
 	}
 
 }

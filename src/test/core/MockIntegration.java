@@ -2,10 +2,7 @@ package test.core;
 
 import java.util.Optional;
 
-import com.google.common.collect.ImmutableMap;
-
 import core.model.AbstractIntegration;
-import core.model.Platform;
 import core.schema.FieldValueMap;
 import core.schema.Fields;
 
@@ -15,16 +12,15 @@ public class MockIntegration extends AbstractIntegration {
 
 	public static final String DEFAULT_PASSWORD = "mock-password";
 
-	private MockIntegration(Platform platform, FieldValueMap fieldValueMap) {
-		super(Optional.empty(), platform, fieldValueMap);
+	private MockIntegration(FieldValueMap fieldValueMap) {
+		super(Optional.empty(), new MockPlatform(), fieldValueMap);
 	}
 
 	public static MockIntegration create(String id) {
-		Platform platform = new MockPlatform();
-		Fields fields = platform.getFields();
-		return new MockIntegration(platform,
-				FieldValueMap.createWith(fields, ImmutableMap.of(fields.getIdField().getLabel(), id,
-						MockPlatform.USERNAME_LABEL, DEFAULT_USERNAME, MockPlatform.PASSWORD_LABEL, DEFAULT_PASSWORD)));
+		Fields fields = new MockPlatform().getFields();
+		return new MockIntegration(FieldValueMap.builder(fields).setField(MockPlatform.ID_FIELD_LABEL, id)
+				.setField(MockPlatform.USERNAME_LABEL, DEFAULT_USERNAME)
+				.setField(MockPlatform.PASSWORD_LABEL, DEFAULT_PASSWORD).create());
 	}
 
 	@Override

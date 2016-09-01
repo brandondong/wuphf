@@ -2,13 +2,9 @@ package test.core;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Collections;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import com.google.common.collect.ImmutableMap;
 
 import core.schema.Field;
 import core.schema.FieldValueMap;
@@ -29,21 +25,22 @@ public class FieldValueMapTest {
 
 	@Test
 	public void testIncorrectSize() {
-		thrown.expect(IllegalArgumentException.class);
-		thrown.expectMessage("Integration properties do not match platform fields.");
-		FieldValueMap.createWith(fields, Collections.emptyMap());
+		thrown.expect(IllegalStateException.class);
+		thrown.expectMessage("Value must be set for mock field.");
+		FieldValueMap.builder(fields).create();
 	}
 
 	@Test
 	public void testFieldDoesntBelong() {
 		thrown.expect(IllegalArgumentException.class);
 		thrown.expectMessage("No matching platform field found with label mock4.");
-		FieldValueMap.createWith(fields, ImmutableMap.of("mock", "1", "mock2", "2", "mock4", "4"));
+		FieldValueMap.builder(fields).setField("mock", "1").setField("mock4", "4");
 	}
 
 	@Test
 	public void testValid() {
-		FieldValueMap map = FieldValueMap.createWith(fields, ImmutableMap.of("mock", "1", "mock2", "2", "mock3", "3"));
+		FieldValueMap map = FieldValueMap.builder(fields).setField("mock", "1").setField("mock2", "2")
+				.setField("mock3", "3").create();
 		assertEquals("1", map.getValueForField(field1));
 		assertEquals("2", map.getValueForField(field2));
 		assertEquals("3", map.getValueForField(field3));
