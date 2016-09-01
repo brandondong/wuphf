@@ -10,13 +10,13 @@ public class Field {
 
 	private final boolean idField;
 
-	private final boolean secret;
+	private final InputType type;
 
-	private Field(String label, Optional<String> description, boolean idField, boolean secret) {
+	private Field(String label, Optional<String> description, boolean idField, InputType type) {
 		this.label = label;
 		this.description = description;
 		this.idField = idField;
-		this.secret = secret;
+		this.type = type;
 	}
 
 	public String getLabel() {
@@ -31,8 +31,8 @@ public class Field {
 		return idField;
 	}
 
-	public boolean isSecret() {
-		return secret;
+	public InputType getType() {
+		return type;
 	}
 
 	public static Builder builder(String label) {
@@ -72,7 +72,7 @@ public class Field {
 
 		private boolean idField = false;
 
-		private boolean secret = false;
+		private InputType type = InputType.TEXT;
 
 		private Builder(String label) {
 			this.label = label;
@@ -88,13 +88,13 @@ public class Field {
 			return this;
 		}
 
-		public Builder secret() {
-			secret = true;
+		public Builder type(InputType type) {
+			this.type = type;
 			return this;
 		}
 
 		public Field create() {
-			return new Field(label, description, idField, secret);
+			return new Field(label, description, idField, type);
 		}
 	}
 

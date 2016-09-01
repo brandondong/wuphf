@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import core.schema.Field;
+import core.schema.InputType;
 import web.schema.FieldWebModel;
 
 public class FieldWebModelTest {
@@ -18,17 +19,17 @@ public class FieldWebModelTest {
 		assertEquals("mock", field.getLabel());
 		assertNull(field.getDescription());
 		assertTrue(field.isIdField());
-		assertFalse(field.isSecret());
+		assertEquals(InputType.TEXT, field.getType());
 	}
 
 	@Test
 	public void testConvertWithDescription() {
 		FieldWebModel field = FieldWebModel
-				.createFrom(Field.builder("mock").description("description").secret().create());
+				.createFrom(Field.builder("mock").description("description").type(InputType.EMAIL).create());
 		assertEquals("mock", field.getLabel());
 		assertEquals("description", field.getDescription());
 		assertFalse(field.isIdField());
-		assertTrue(field.isSecret());
+		assertEquals(InputType.EMAIL, field.getType());
 	}
 
 }

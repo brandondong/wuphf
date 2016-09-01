@@ -1,6 +1,7 @@
 package web.schema;
 
 import core.schema.Field;
+import core.schema.InputType;
 
 public class FieldWebModel {
 
@@ -10,7 +11,7 @@ public class FieldWebModel {
 
 	private boolean idField;
 
-	private boolean secret;
+	private InputType type;
 
 	/**
 	 * Public constructor for JAXB, use {{@link #createFrom(Field)}} to
@@ -19,16 +20,16 @@ public class FieldWebModel {
 	public FieldWebModel() {
 	}
 
-	private FieldWebModel(String label, String description, boolean idField, boolean secret) {
+	private FieldWebModel(String label, String description, boolean idField, InputType type) {
 		this.label = label;
 		this.description = description;
 		this.idField = idField;
-		this.secret = secret;
+		this.type = type;
 	}
 
 	public static FieldWebModel createFrom(Field field) {
 		return new FieldWebModel(field.getLabel(), field.getDescription().orElse(null), field.isIdField(),
-				field.isSecret());
+				field.getType());
 	}
 
 	public String getLabel() {
@@ -55,12 +56,12 @@ public class FieldWebModel {
 		this.idField = idField;
 	}
 
-	public boolean isSecret() {
-		return secret;
+	public InputType getType() {
+		return type;
 	}
 
-	public void setSecret(boolean secret) {
-		this.secret = secret;
+	public void setType(InputType type) {
+		this.type = type;
 	}
 
 }

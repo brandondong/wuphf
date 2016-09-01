@@ -8,11 +8,7 @@
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
         <script src="platformController.js"></script>
         <script src="integrationService.js"></script>
-        <style>
-			table.borderless tbody tr td, table.borderless tbody tr th, table.borderless thead tr th {
-    			border: none;
-			}
-		</style>
+        <link rel="stylesheet" type="text/css" href="create.css">
     </head>
     <body ng-app="wuphf" ng-controller="platformCtrl">
 	    <nav class="navbar navbar-inverse">
@@ -29,9 +25,9 @@
         <div class="container">
         	<h2>Select a platform</h2>
         	<div class="table-responsive"><table class="table borderless"><tbody>
-        		<tr ng-repeat="ps in split()">
+        		<tr ng-repeat="ps in split">
         			<td ng-repeat="p in ps">
-        				<img src="images/{{p.logo}}" ng-click="select(p)" class="img-rounded" alt={{p.label}} width="64" height="64">
+        				<img src="images/{{p.logo}}" ng-click="select(p)" ng-class="{selected: p == selected}" class="img-rounded" alt={{p.label}} width="64" height="64">
 					</td>
 				</tr>
 			</tbody></table></div>

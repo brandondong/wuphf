@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import core.schema.Field;
+import core.schema.InputType;
 
 public class FieldTest {
 
@@ -16,7 +17,7 @@ public class FieldTest {
 		assertEquals("mock", field.getLabel());
 		assertFalse(field.getDescription().isPresent());
 		assertFalse(field.isIdField());
-		assertFalse(field.isSecret());
+		assertEquals(InputType.TEXT, field.getType());
 	}
 
 	@Test
@@ -29,10 +30,10 @@ public class FieldTest {
 
 	@Test
 	public void createIdField() {
-		Field field = Field.builder("mock").id().secret().create();
+		Field field = Field.builder("mock").id().type(InputType.PASSWORD).create();
 		assertEquals("mock", field.getLabel());
 		assertTrue(field.isIdField());
-		assertTrue(field.isSecret());
+		assertEquals(InputType.PASSWORD, field.getType());
 	}
 
 	@Test
