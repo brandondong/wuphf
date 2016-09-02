@@ -3,7 +3,13 @@ table.borderless tbody tr td, table.borderless tbody tr th, table.borderless the
 }
 img {
 	cursor: pointer;
+	float: left;
+	margin: 30px 30px 0px 0px;
 }
 img.selected {
 	box-shadow: 0px 12px 22px 1px #333;
+}
+.clearfix {
+	clear: both;
+	margin-bottom: 50px;
 }

@@ -24,13 +24,8 @@
 		</nav>
         <div class="container">
         	<h2>Select a platform</h2>
-        	<div class="table-responsive"><table class="table borderless"><tbody>
-        		<tr ng-repeat="ps in split">
-        			<td ng-repeat="p in ps">
-        				<img src="images/{{p.logo}}" ng-click="select(p)" ng-class="{selected: p == selected}" class="img-rounded" alt={{p.label}} width="64" height="64">
-					</td>
-				</tr>
-			</tbody></table></div>
+        	<img ng-repeat="p in platforms" src="images/{{p.logo}}" ng-click="select(p)" ng-class="{selected: p == selected}" class="img-rounded" alt={{p.label}} width="64" height="64">
+        	<div class="clearfix"></div>
 			<button type="button" class="btn btn-primary btn-lg pull-right" ng-disabled="selected==null">Create Integration</button>
         </div>
     </body>
