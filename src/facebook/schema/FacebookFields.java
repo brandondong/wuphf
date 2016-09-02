@@ -6,7 +6,7 @@ import core.schema.InputType;
 
 public class FacebookFields {
 
-	public static final Field USERNAME = Field.builder("Username").id().create();
+	public static final Field EMAIL = Field.builder("Email").id().type(InputType.EMAIL).create();
 
 	public static final Field PASSWORD = Field.builder("Password").type(InputType.PASSWORD).create();
 
@@ -14,7 +14,7 @@ public class FacebookFields {
 	}
 
 	public static Fields getFields() {
-		return Fields.create(USERNAME, PASSWORD);
+		return Fields.create(EMAIL, PASSWORD);
 	}
 
 }
