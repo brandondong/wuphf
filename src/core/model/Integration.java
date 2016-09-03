@@ -31,14 +31,6 @@ public interface Integration {
 	void post(String message);
 
 	/**
-	 * Updates the {@link FieldValueMap}
-	 * 
-	 * @param fieldValueMap
-	 *            the new map to use
-	 */
-	void setValueMap(FieldValueMap fieldValueMap);
-
-	/**
 	 * @return this integration's {@link FieldValueMap}
 	 */
 	FieldValueMap getFieldValueMap();

@@ -26,7 +26,7 @@
         	<h2>Select a platform</h2>
         	<img ng-repeat="p in platforms" src="images/{{p.logo}}" ng-click="select(p)" ng-class="{selected: p == selected}" class="img-rounded" alt={{p.label}} width="64" height="64">
         	<div class="clearfix"></div>
-			<button type="button" class="btn btn-primary btn-lg pull-right" ng-disabled="selected==null">Create Integration</button>
+			<button type="button" class="btn btn-primary btn-lg pull-right" ng-disabled="selected==null" onclick="location.href='form.html';">Create Integration</button>
         </div>
     </body>
 </html>

@@ -10,7 +10,6 @@ import javax.ws.rs.core.MediaType;
 
 import web.core.IntegrationService;
 import web.message.MessageIntegrationWrapper;
-import web.model.IntegrationWebModel;
 import web.model.PlatformWebModel;
 
 /**
@@ -28,23 +27,10 @@ public class IntegrationWebService {
 		return service.getAllPlatforms();
 	}
 
-	@GET
-	@Path("/integrations")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<IntegrationWebModel> getAllIntegrations() {
-		return service.getAllIntegrations();
-	}
-
 	@POST
 	@Path("/post")
 	public void postMessage(MessageIntegrationWrapper message) {
 		service.postMessage(message);
-	}
-
-	@POST
-	@Path("/create")
-	public void createOrEditIntegration(IntegrationWebModel integration) {
-		service.createOrEditIntegration(integration);
 	}
 
 }

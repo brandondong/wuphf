@@ -12,7 +12,7 @@ public abstract class AbstractIntegration implements Integration {
 
 	private final Platform platform;
 
-	private FieldValueMap fieldValueMap;
+	private final FieldValueMap fieldValueMap;
 
 	public AbstractIntegration(Optional<String> label, Platform platform, FieldValueMap fieldValueMap) {
 		id = fieldValueMap.getIdValue();
@@ -34,11 +34,6 @@ public abstract class AbstractIntegration implements Integration {
 	@Override
 	public Platform getPlatform() {
 		return platform;
-	}
-
-	@Override
-	public void setValueMap(FieldValueMap fieldValueMap) {
-		this.fieldValueMap = fieldValueMap;
 	}
 
 	@Override

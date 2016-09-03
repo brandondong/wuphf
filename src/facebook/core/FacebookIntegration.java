@@ -14,7 +14,6 @@ public class FacebookIntegration extends AbstractIntegration {
 	@Override
 	public void post(String message) {
 		// TODO Auto-generated method stub
-
 	}
 
 }
