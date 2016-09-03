@@ -6,8 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script src="formController.js"></script>
+        <script src ="storageService.js"></script>
     </head>
-    <body>
+    <body ng-app="wuphf" ng-controller="formCtrl">
     	<nav class="navbar navbar-inverse">
 			<div class="container-fluid">
 		    	<div class="navbar-header">
@@ -20,7 +22,7 @@
 		  	</div>
 		</nav>
 		<div class="container">
-    		<h1>Hello!</h1>
+    		<h1>Hello! {{integration}}</h1>
     	</div>
     </body>
 </html>
