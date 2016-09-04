@@ -1,12 +1,8 @@
 package web.model;
 
-import static java.util.stream.Collectors.toMap;
-
 import java.util.Map;
 import java.util.Optional;
 
-import core.model.Integration;
-import core.schema.FieldValueMap;
 import web.schema.FieldWebModel;
 
 public class IntegrationWebModel {
@@ -18,31 +14,6 @@ public class IntegrationWebModel {
 	private String label;
 
 	private Map<FieldWebModel, String> valueMap;
-
-	/**
-	 * Public constructor for JAXB, use {{@link #createFrom(Integration)} to
-	 * instantiate instead
-	 */
-	public IntegrationWebModel() {
-	}
-
-	private IntegrationWebModel(PlatformWebModel platform, String id, String label,
-			Map<FieldWebModel, String> valueMap) {
-		this.platform = platform;
-		this.id = id;
-		this.label = label;
-		this.valueMap = valueMap;
-	}
-
-	public static IntegrationWebModel createFrom(Integration integration) {
-		return new IntegrationWebModel(PlatformWebModel.createFrom(integration.getPlatform()), integration.getId(),
-				integration.getLabel().orElse(null), createValueMap(integration.getFieldValueMap()));
-	}
-
-	private static Map<FieldWebModel, String> createValueMap(FieldValueMap fieldValueMap) {
-		return fieldValueMap.getFields().stream()
-				.collect(toMap(FieldWebModel::createFrom, fieldValueMap::getValueForField));
-	}
 
 	public Optional<String> getIntegrationLabel() {
 		return Optional.ofNullable(label);
@@ -77,6 +48,10 @@ public class IntegrationWebModel {
 
 	public Map<FieldWebModel, String> getValueMap() {
 		return valueMap;
+	}
+
+	public void setValueMap(Map<FieldWebModel, String> valueMap) {
+		this.valueMap = valueMap;
 	}
 
 }

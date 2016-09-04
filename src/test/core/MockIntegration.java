@@ -1,7 +1,5 @@
 package test.core;
 
-import java.util.Optional;
-
 import core.model.AbstractIntegration;
 import core.schema.FieldValueMap;
 import core.schema.Fields;
@@ -13,7 +11,7 @@ public class MockIntegration extends AbstractIntegration {
 	public static final String DEFAULT_PASSWORD = "mock-password";
 
 	private MockIntegration(FieldValueMap fieldValueMap) {
-		super(Optional.empty(), new MockPlatform(), fieldValueMap);
+		super(fieldValueMap.getIdValue(), fieldValueMap);
 	}
 
 	public static MockIntegration create(String id) {

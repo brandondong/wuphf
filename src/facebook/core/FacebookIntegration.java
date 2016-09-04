@@ -1,14 +1,12 @@
 package facebook.core;
 
-import java.util.Optional;
-
 import core.model.AbstractIntegration;
 import core.schema.FieldValueMap;
 
 public class FacebookIntegration extends AbstractIntegration {
 
-	public FacebookIntegration(Optional<String> label, FieldValueMap fieldValueMap) {
-		super(label, new FacebookPlatform(), fieldValueMap);
+	FacebookIntegration(String label, FieldValueMap fieldValueMap) {
+		super(label, fieldValueMap);
 	}
 
 	@Override

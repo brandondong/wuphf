@@ -29,7 +29,7 @@ public class IntegrationService {
 	 *            the message to be posted
 	 */
 	public void postMessage(MessageIntegrationWrapper message) {
-		message.getIntegrations().stream().map(i -> IntegrationConverter.from(i).create())
+		message.getIntegrations().stream().map(i -> IntegrationConverter.from(i).convert())
 				.forEach(i -> i.post(message.getMessage()));
 	}
 

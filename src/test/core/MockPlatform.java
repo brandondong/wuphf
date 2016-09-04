@@ -1,7 +1,5 @@
 package test.core;
 
-import java.util.Optional;
-
 import core.model.AbstractPlatform;
 import core.model.Integration;
 import core.schema.Field;
@@ -38,7 +36,7 @@ public class MockPlatform extends AbstractPlatform {
 	}
 
 	@Override
-	public Integration createIntegration(Optional<String> label, FieldValueMap fieldValueMap) {
+	public Integration createIntegration(String label, FieldValueMap fieldValueMap) {
 		return MockIntegration.create(fieldValueMap.getIdValue());
 	}
 

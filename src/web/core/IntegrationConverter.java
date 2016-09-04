@@ -22,10 +22,14 @@ public class IntegrationConverter {
 		return new IntegrationConverter(integration);
 	}
 
-	public Integration create() {
+	public Integration convert() {
 		Platform platform = PlatformManager.instance().getPlatformByLabel(integration.getPlatform().getLabel());
 		FieldValueMap map = createFieldValueMap(platform.getFields(), integration.getValueMap());
-		return platform.createIntegration(integration.getIntegrationLabel(), map);
+		return platform.createIntegration(getIntegrationLabel(map), map);
+	}
+
+	private String getIntegrationLabel(FieldValueMap map) {
+		return integration.getIntegrationLabel().orElse(map.getIdValue());
 	}
 
 	private FieldValueMap createFieldValueMap(Fields fields, Map<FieldWebModel, String> valueMap) {

@@ -1,7 +1,5 @@
 package facebook.core;
 
-import java.util.Optional;
-
 import core.model.AbstractPlatform;
 import core.model.Integration;
 import core.schema.FieldValueMap;
@@ -21,7 +19,7 @@ public class FacebookPlatform extends AbstractPlatform {
 	}
 
 	@Override
-	public Integration createIntegration(Optional<String> label, FieldValueMap fieldValueMap) {
+	public Integration createIntegration(String label, FieldValueMap fieldValueMap) {
 		return new FacebookIntegration(label, fieldValueMap);
 	}
 

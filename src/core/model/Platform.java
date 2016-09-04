@@ -1,7 +1,5 @@
 package core.model;
 
-import java.util.Optional;
-
 import core.schema.FieldValueMap;
 import core.schema.Fields;
 
@@ -22,12 +20,12 @@ public interface Platform {
 
 	/**
 	 * @param label
-	 *            an optional label identifying the integration
+	 *            a label identifying the integration
 	 * @param fieldValueMap
 	 *            properties of the integration to be created
 	 * @return a new {@link Integration} for this platform
 	 */
-	Integration createIntegration(Optional<String> label, FieldValueMap fieldValueMap);
+	Integration createIntegration(String label, FieldValueMap fieldValueMap);
 
 	/**
 	 * @return the filename of the platform branding logo image
