@@ -8,7 +8,6 @@ import core.model.PlatformManager;
 import core.schema.FieldValueMap;
 import core.schema.Fields;
 import web.model.IntegrationWebModel;
-import web.schema.FieldWebModel;
 
 public class IntegrationConverter {
 
@@ -32,9 +31,9 @@ public class IntegrationConverter {
 		return integration.getIntegrationLabel().orElse(map.getIdValue());
 	}
 
-	private FieldValueMap createFieldValueMap(Fields fields, Map<FieldWebModel, String> valueMap) {
+	private FieldValueMap createFieldValueMap(Fields fields, Map<String, String> valueMap) {
 		FieldValueMap.Builder builder = FieldValueMap.builder(fields);
-		valueMap.keySet().forEach(f -> builder.setField(f.getLabel(), valueMap.get(f)));
+		valueMap.keySet().forEach(f -> builder.setField(f, valueMap.get(f)));
 		return builder.create();
 	}
 

@@ -26,7 +26,7 @@
     		<form>
     			<div class="form-group" ng-repeat="f in integration.platform.fields">
       				<label for={{f.label}}>{{f.label}}:</label>
-      				<input type={{f.type.toLowerCase()}} class="form-control" id={{f.label}} placeholder="Enter {{f.label}}">
+      				<input type={{f.type.toLowerCase()}} ng-model="integration.valueMap[f.label]" class="form-control" id={{f.label}} placeholder="Enter {{f.label}}">
     			</div>
   			</form>
   			<button type="button" class="btn btn-primary btn-lg pull-right">Save</button>

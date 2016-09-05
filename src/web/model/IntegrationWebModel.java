@@ -3,8 +3,6 @@ package web.model;
 import java.util.Map;
 import java.util.Optional;
 
-import web.schema.FieldWebModel;
-
 public class IntegrationWebModel {
 
 	private PlatformWebModel platform;
@@ -13,7 +11,7 @@ public class IntegrationWebModel {
 
 	private String label;
 
-	private Map<FieldWebModel, String> valueMap;
+	private Map<String, String> valueMap;
 
 	public Optional<String> getIntegrationLabel() {
 		return Optional.ofNullable(label);
@@ -46,11 +44,11 @@ public class IntegrationWebModel {
 		this.label = label;
 	}
 
-	public Map<FieldWebModel, String> getValueMap() {
+	public Map<String, String> getValueMap() {
 		return valueMap;
 	}
 
-	public void setValueMap(Map<FieldWebModel, String> valueMap) {
+	public void setValueMap(Map<String, String> valueMap) {
 		this.valueMap = valueMap;
 	}
 
