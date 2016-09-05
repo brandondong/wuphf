@@ -22,7 +22,14 @@
 		  	</div>
 		</nav>
 		<div class="container">
-    		<h1>Hello! {{integration}}</h1>
+    		<h2>Integration Details</h2>
+    		<form>
+    			<div class="form-group" ng-repeat="f in integration.platform.fields">
+      				<label for={{f.label}}>{{f.label}}:</label>
+      				<input type={{f.type.toLowerCase()}} class="form-control" id={{f.label}} placeholder="Enter {{f.label}}">
+    			</div>
+  			</form>
+  			<button type="button" class="btn btn-primary btn-lg pull-right">Save</button>
     	</div>
     </body>
 </html>
