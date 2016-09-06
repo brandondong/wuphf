@@ -23,13 +23,13 @@
 		</nav>
 		<div class="container">
     		<h2>Integration Details</h2>
-    		<form>
-    			<div class="form-group" ng-repeat="f in integration.platform.fields">
+    		<form name="userForm">
+    			<div class="form-group" ng-repeat="f in integration.platform.fields" ng-class="{'has-error': userForm[f.label].$invalid && userForm[f.label].$dirty}">
       				<label for={{f.label}}>{{f.label}}:</label>
-      				<input type={{f.type.toLowerCase()}} ng-model="integration.valueMap[f.label]" class="form-control" id={{f.label}} placeholder="Enter {{f.label}}">
+      				<input type={{f.type.toLowerCase()}} ng-model="integration.valueMap[f.label]" class="form-control" name={{f.label}} placeholder="Enter {{f.label}}" required>
     			</div>
   			</form>
-  			<button type="button" class="btn btn-primary btn-lg pull-right">Save</button>
+  			<button type="button" class="btn btn-primary btn-lg pull-right" ng-disabled="userForm.$invalid">Save</button>
     	</div>
     </body>
 </html>
