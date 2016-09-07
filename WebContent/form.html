@@ -30,7 +30,7 @@
       				<input type={{f.type.toLowerCase()}} ng-model="integration.valueMap[f.label]" class="form-control" name={{f.label}} placeholder="Enter {{f.label}}" required>
     			</div>
   			</form>
-  			<button type="button" class="btn btn-primary btn-lg pull-right" ng-disabled="userForm.$invalid">Save</button>
+  			<button type="button" class="btn btn-primary btn-lg pull-right" ng-disabled="userForm.$invalid" ng-click="save()">Save</button>
     	</div>
     </body>
 </html>

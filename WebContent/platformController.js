@@ -10,6 +10,6 @@ angular.module("wuphf", []).controller("platformCtrl", function($scope, $http) {
 	$scope.create = function() {
 		var integration = {platform: $scope.selected, valueMap: {}};
 		storageService.setFormIntegration(integration);
-		location.href="form.html";
+		location.href = "form.html";
 	}
 });
