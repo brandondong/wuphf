@@ -25,10 +25,15 @@
 		<div class="container">
     		<h2>Integration Details</h2>
     		<form name="userForm">
+    			<div class="form-group">
+    				<label for="label">Label</label>
+    				<input type="text" class="form-control" ng-model="integration.label" id="label" placeholder="Enter Label">
+  				</div>
     			<div class="form-group" ng-repeat="f in integration.platform.fields" ng-class="{'has-error': userForm[f.label].$invalid && userForm[f.label].$dirty}">
-      				<label for={{f.label}}>{{f.label}}:</label>
-      				<input type={{f.type.toLowerCase()}} ng-model="integration.valueMap[f.label]" class="form-control" name={{f.label}} placeholder="Enter {{f.label}}" required>
+      				<label for={{f.label}}>{{f.label}} *</label>
+      				<input type={{f.type.toLowerCase()}} ng-model="integration.valueMap[f.label]" class="form-control" name={{f.label}} id={{f.label}} placeholder="Enter {{f.label}}" required>
     			</div>
+    			* Required field
   			</form>
   			<button type="button" class="btn btn-primary btn-lg pull-right" ng-disabled="userForm.$invalid" ng-click="save()">Save</button>
     	</div>

@@ -3,6 +3,8 @@ package web.model;
 import java.util.Map;
 import java.util.Optional;
 
+import com.google.common.base.Strings;
+
 public class IntegrationWebModel {
 
 	private PlatformWebModel platform;
@@ -14,7 +16,7 @@ public class IntegrationWebModel {
 	private Map<String, String> valueMap;
 
 	public Optional<String> getIntegrationLabel() {
-		return Optional.ofNullable(label);
+		return Optional.ofNullable(Strings.emptyToNull(label));
 	}
 
 	public PlatformWebModel getPlatform() {
