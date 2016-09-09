@@ -33,3 +33,8 @@ var storageService = {
 			return JSON.parse(localStorage.getItem(INTEGRATIONS_KEY)) || [];
 		}
 };
+
+var Integration = function(platform) {
+	this.platform = platform;
+	this.valueMap = {};
+}
