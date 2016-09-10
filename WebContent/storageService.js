@@ -17,7 +17,7 @@ var storageService = {
 			function addOrModify(integration, integrations) {
 				for (var i = 0; i < integrations.length; i++) {
 					var existing = integrations[i];
-					if (integration.id == existing.id && integration.platform.label == existing.platform.label) {
+					if (integration.valueMap[integration.idField] == existing.valueMap[existing.idField] && integration.platform.label == existing.platform.label) {
 						integrations[i] = integration;
 						return;
 					}
@@ -37,4 +37,11 @@ var storageService = {
 var Integration = function(platform) {
 	this.platform = platform;
 	this.valueMap = {};
+	for (var i = 0; i < platform.fields.length; i++) {
+		var field = platform.fields[i];
+		if (field.idField) {
+			this.idField = field.label;
+			return;
+		}
+	}
 }
