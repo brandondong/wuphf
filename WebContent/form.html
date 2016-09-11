@@ -8,6 +8,12 @@
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
         <script src="formController.js"></script>
         <script src ="storageService.js"></script>
+        <style>
+        img {
+        	float: left;
+        	margin-right: 20px;
+        }
+        </style>
     </head>
     <body ng-app="wuphf" ng-controller="formCtrl">
     	<nav class="navbar navbar-inverse">
@@ -23,6 +29,7 @@
 		  	</div>
 		</nav>
 		<div class="container">
+			<img src="images/{{integration.platform.logo}}" class="img-rounded" alt={{integration.platform.label}} width="48" height="48">
     		<h2>Integration Details</h2>
     		<form name="userForm">
     			<div class="form-group">
