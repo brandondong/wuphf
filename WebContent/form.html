@@ -8,12 +8,7 @@
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
         <script src="formController.js"></script>
         <script src ="storageService.js"></script>
-        <style>
-        img {
-        	float: left;
-        	margin-right: 20px;
-        }
-        </style>
+        <link rel="stylesheet" type="text/css" href="form.css">
     </head>
     <body ng-app="wuphf" ng-controller="formCtrl">
     	<nav class="navbar navbar-inverse">
@@ -31,7 +26,7 @@
 		<div class="container">
 			<img src="images/{{integration.platform.logo}}" class="img-rounded" alt={{integration.platform.label}} width="48" height="48">
     		<h2>Integration Details</h2>
-    		<div ng-show="match()">An integration with the same {{integration.idField}} already exists.</div>
+    		<div ng-show="match()" class="warning"><span class="glyphicon glyphicon-alert"></span> An integration with the same {{integration.idField}} already exists.</div>
     		<form name="userForm">
     			<div class="form-group">
     				<label for="label">Label</label>
