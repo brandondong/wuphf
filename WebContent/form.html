@@ -31,6 +31,7 @@
 		<div class="container">
 			<img src="images/{{integration.platform.logo}}" class="img-rounded" alt={{integration.platform.label}} width="48" height="48">
     		<h2>Integration Details</h2>
+    		<div ng-show="match()">An integration with the same {{integration.idField}} already exists.</div>
     		<form name="userForm">
     			<div class="form-group">
     				<label for="label">Label</label>
@@ -42,7 +43,7 @@
     			</div>
     			* Required field
   			</form>
-  			<button type="button" class="btn btn-primary btn-lg pull-right" ng-disabled="userForm.$invalid" ng-click="save()">Save</button>
+  			<button type="button" class="btn btn-primary btn-lg pull-right" ng-disabled="userForm.$invalid || match()" ng-click="save()">Save</button>
     	</div>
     </body>
 </html>
