@@ -8,6 +8,7 @@
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
         <script src="integrationController.js"></script>
         <script src ="storageService.js"></script>
+        <link rel="stylesheet" type="text/css" href="integrations.css">
     </head>
     <body ng-app="wuphf" ng-controller="integrationCtrl">
 	    <nav class="navbar navbar-inverse">
@@ -23,7 +24,12 @@
 		  	</div>
 		</nav>
 		<div class="container">
-			<h3>{{integrations}}</h3>
+			<div ng-repeat="i in integrations" class="group">
+				<img src="images/{{i.platform.logo}}" class="img-rounded" alt={{i.platform.label}} width="64" height="64">
+				<h3>{{getLabel(i)}}</h3>
+				<button type="button" class="btn btn-primary">Edit</button>
+				<button type="button" class="btn btn-danger">Delete</button>
+			</div>
 		</div>
     </body>
 </html>

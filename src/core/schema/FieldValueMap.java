@@ -51,6 +51,7 @@ public class FieldValueMap {
 		public Builder setField(String label, String value) {
 			Optional<Field> field = fields.getFieldByLabel(label);
 			checkArgument(field.isPresent(), String.format("No matching platform field found with label %s.", label));
+			checkArgument(!value.isEmpty(), String.format("Value for %s field cannot be empty.", label));
 			valueMap.put(field.get(), value);
 			return this;
 		}

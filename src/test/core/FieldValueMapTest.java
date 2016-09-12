@@ -38,6 +38,13 @@ public class FieldValueMapTest {
 	}
 
 	@Test
+	public void testAddEmptyValue() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("Value for mock field cannot be empty.");
+		FieldValueMap.builder(fields).setField("mock", "");
+	}
+
+	@Test
 	public void testValid() {
 		FieldValueMap map = FieldValueMap.builder(fields).setField("mock", "1").setField("mock2", "2")
 				.setField("mock3", "3").create();
