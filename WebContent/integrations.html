@@ -6,6 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src="integrationController.js"></script>
         <script src ="storageService.js"></script>
         <link rel="stylesheet" type="text/css" href="integrations.css">
@@ -28,7 +30,24 @@
 				<img src="images/{{i.platform.logo}}" class="img-rounded" alt={{i.platform.label}} width="64" height="64">
 				<h3>{{getLabel(i)}}</h3>
 				<button type="button" class="btn btn-primary">Edit</button>
-				<button type="button" class="btn btn-danger">Delete</button>
+				<button type="button" class="btn btn-danger" ng-click="select(i)" data-toggle="modal" data-target="#deleteModal">Delete</button>
+			</div>
+			<div id="deleteModal" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+    				<div class="modal-content">
+	      				<div class="modal-header">
+	        				<button type="button" class="close" data-dismiss="modal">&times;</button>
+	        				<h4 class="modal-title">Delete Integration</h4>
+	      				</div>
+      						<div class="modal-body">
+        					<p>Are you sure you want to delete <b>{{getLabel(selected)}}</b>? This cannot be undone.</p>
+      					</div>
+      					<div class="modal-footer">
+        					<button type="button" class="btn btn-default" data-dismiss="modal">Yes</button>
+        					<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+      					</div>
+    				</div>
+  				</div>
 			</div>
 		</div>
     </body>

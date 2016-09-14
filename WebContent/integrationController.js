@@ -7,5 +7,9 @@ angular.module("wuphf", []).controller("integrationCtrl", function($scope) {
 			return label;
 		}
 		return integration.valueMap[integration.idField];
+	};
+	
+	$scope.select = function(integration) {
+		$scope.selected = integration;
 	}
 });
