@@ -11,5 +11,10 @@ angular.module("wuphf", []).controller("integrationCtrl", function($scope) {
 	
 	$scope.select = function(integration) {
 		$scope.selected = integration;
-	}
+	};
+	
+	$scope.deleteSelected = function() {
+		storageService.deleteSelected($scope.selected);
+		$scope.integrations = storageService.getIntegrations();
+	};
 });

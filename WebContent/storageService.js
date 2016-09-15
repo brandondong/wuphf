@@ -31,6 +31,18 @@ var storageService = {
 		
 		getIntegrations: function() {
 			return JSON.parse(localStorage.getItem(INTEGRATIONS_KEY)) || [];
+		},
+		
+		deleteSelected: function(integration) {
+			var integrations = storageService.getIntegrations();
+			for (var i = 0; i < integrations.length; i++) {
+				var existing = integrations[i];
+				if (integrationsEqual(integration, existing)) {
+					integrations.splice(i, 1);
+					localStorage.setItem(INTEGRATIONS_KEY, JSON.stringify(integrations));
+					return;
+				}
+			}
 		}
 };
 
