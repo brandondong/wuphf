@@ -17,4 +17,9 @@ angular.module("wuphf", []).controller("integrationCtrl", function($scope) {
 		storageService.deleteSelected($scope.selected);
 		$scope.integrations = storageService.getIntegrations();
 	};
+	
+	$scope.edit = function(integration) {
+		storageService.setFormIntegration(integration);
+		location.href = "form.html";
+	};
 });

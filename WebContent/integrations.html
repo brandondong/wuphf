@@ -26,10 +26,10 @@
 		  	</div>
 		</nav>
 		<div class="container">
-			<div ng-repeat="i in integrations" class="group">
+			<div ng-repeat="i in integrations track by $index" class="group">
 				<img src="images/{{i.platform.logo}}" class="img-rounded" alt={{i.platform.label}} width="64" height="64">
 				<h3>{{getLabel(i)}}</h3>
-				<button type="button" class="btn btn-primary">Edit</button>
+				<button type="button" class="btn btn-primary" ng-click="edit(i)">Edit</button>
 				<button type="button" class="btn btn-danger" ng-click="select(i)" data-toggle="modal" data-target="#deleteModal">Delete</button>
 			</div>
 			<div id="deleteModal" class="modal fade" role="dialog">
