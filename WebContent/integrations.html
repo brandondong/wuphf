@@ -27,6 +27,7 @@
 		</nav>
 		<div class="container">
 			<h2 ng-show="integrations.length == 0">You do not currently have any integrations. Click <a href="create.html">here</a> to create one.</h2>
+			<h2 ng-show="integrations.length > 0">Existing Integrations</h2>
 			<div ng-repeat="i in integrations track by $index" class="group">
 				<img src="images/{{i.platform.logo}}" class="img-rounded" alt={{i.platform.label}} width="64" height="64">
 				<h3>{{getLabel(i)}}</h3>
