@@ -11,10 +11,17 @@ import web.model.IntegrationWebModel;
 
 public class IntegrationConverter {
 
-	private final IntegrationWebModel integration;
+	private final IntegrationWebModel webModel;
 
-	private IntegrationConverter(IntegrationWebModel integration) {
-		this.integration = integration;
+	private final FieldValueMap map;
+
+	private final Integration integration;
+
+	private IntegrationConverter(IntegrationWebModel webModel) {
+		this.webModel = webModel;
+		Platform platform = PlatformManager.instance().getPlatformByLabel(webModel.getPlatform().getLabel());
+		map = createFieldValueMap(platform.getFields(), webModel.getValueMap());
+		integration = platform.createIntegration(map);
 	}
 
 	public static IntegrationConverter from(IntegrationWebModel integration) {
@@ -22,13 +29,11 @@ public class IntegrationConverter {
 	}
 
 	public Integration convert() {
-		Platform platform = PlatformManager.instance().getPlatformByLabel(integration.getPlatform().getLabel());
-		FieldValueMap map = createFieldValueMap(platform.getFields(), integration.getValueMap());
-		return platform.createIntegration(getIntegrationLabel(map), map);
+		return integration;
 	}
 
-	private String getIntegrationLabel(FieldValueMap map) {
-		return integration.getIntegrationLabel().orElse(map.getIdValue());
+	public String getIntegrationLabel() {
+		return webModel.getIntegrationLabel().orElse(map.getIdValue());
 	}
 
 	private FieldValueMap createFieldValueMap(Fields fields, Map<String, String> valueMap) {

@@ -1,12 +1,18 @@
 package facebook.core;
 
-import core.model.AbstractIntegration;
+import core.model.Integration;
 import core.schema.FieldValueMap;
+import facebook.schema.FacebookFields;
 
-public class FacebookIntegration extends AbstractIntegration {
+public class FacebookIntegration implements Integration {
 
-	FacebookIntegration(String label, FieldValueMap fieldValueMap) {
-		super(label, fieldValueMap);
+	private final String username;
+
+	private final String password;
+
+	FacebookIntegration(FieldValueMap fieldValueMap) {
+		username = fieldValueMap.getValueForField(FacebookFields.EMAIL);
+		password = fieldValueMap.getValueForField(FacebookFields.PASSWORD);
 	}
 
 	@Override

@@ -19,13 +19,11 @@ public interface Platform {
 	Fields getFields();
 
 	/**
-	 * @param label
-	 *            a label identifying the integration
 	 * @param fieldValueMap
 	 *            properties of the integration to be created
 	 * @return a new {@link Integration} for this platform
 	 */
-	Integration createIntegration(String label, FieldValueMap fieldValueMap);
+	Integration createIntegration(FieldValueMap fieldValueMap);
 
 	/**
 	 * @return the filename of the platform branding logo image

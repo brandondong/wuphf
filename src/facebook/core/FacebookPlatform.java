@@ -19,8 +19,8 @@ public class FacebookPlatform extends AbstractPlatform {
 	}
 
 	@Override
-	public Integration createIntegration(String label, FieldValueMap fieldValueMap) {
-		return new FacebookIntegration(label, fieldValueMap);
+	public Integration createIntegration(FieldValueMap fieldValueMap) {
+		return new FacebookIntegration(fieldValueMap);
 	}
 
 	@Override

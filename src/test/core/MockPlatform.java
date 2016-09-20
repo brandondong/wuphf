@@ -36,8 +36,8 @@ public class MockPlatform extends AbstractPlatform {
 	}
 
 	@Override
-	public Integration createIntegration(String label, FieldValueMap fieldValueMap) {
-		return MockIntegration.create(fieldValueMap.getIdValue());
+	public Integration createIntegration(FieldValueMap fieldValueMap) {
+		return new MockIntegration(fieldValueMap);
 	}
 
 	@Override
