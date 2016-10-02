@@ -11,21 +11,7 @@ var storageService = {
 			return JSON.parse(localStorage.getItem(CURRENT_FORM_INTEGRATION_KEY));
 		},
 		
-		saveIntegration: function(integration) {
-			var integrations = storageService.getIntegrations();
-			
-			function addOrModify(integration, integrations) {
-				for (var i = 0; i < integrations.length; i++) {
-					var existing = integrations[i];
-					if (integrationsEqual(integration, existing)) {
-						integrations[i] = integration;
-						return;
-					}
-				}
-				integrations.push(integration);
-			}
-			
-			addOrModify(integration, integrations);
+		saveIntegrations: function(integrations) {
 			localStorage.setItem(INTEGRATIONS_KEY, JSON.stringify(integrations));
 		},
 		
