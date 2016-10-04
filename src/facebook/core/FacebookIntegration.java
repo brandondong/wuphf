@@ -18,6 +18,7 @@ public class FacebookIntegration implements Integration {
 	@Override
 	public void post(String message) {
 		// TODO Auto-generated method stub
+		System.out.println("Username: " + username + " Password: " + password);
 	}
 
 }

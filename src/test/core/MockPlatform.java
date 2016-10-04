@@ -1,12 +1,12 @@
 package test.core;
 
-import core.model.AbstractPlatform;
 import core.model.Integration;
+import core.model.Platform;
 import core.schema.Field;
 import core.schema.FieldValueMap;
 import core.schema.Fields;
 
-public class MockPlatform extends AbstractPlatform {
+public class MockPlatform implements Platform {
 
 	public static final String LABEL = "mock-platform-label";
 

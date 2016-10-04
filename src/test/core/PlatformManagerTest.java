@@ -1,12 +1,12 @@
 package test.core;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import core.model.Platform;
 import core.model.PlatformManager;
 import facebook.core.FacebookPlatform;
 
@@ -16,14 +16,10 @@ public class PlatformManagerTest {
 	public ExpectedException thrown = ExpectedException.none();
 
 	@Test
-	public void testPlatforms() {
-		assertTrue(PlatformManager.instance().getAllPlatforms().contains(new FacebookPlatform()));
-	}
-
-	@Test
 	public void testGetByLabel() {
 		String label = new FacebookPlatform().getLabel();
-		assertEquals(new FacebookPlatform(), PlatformManager.instance().getPlatformByLabel(label));
+		Platform facebookPlatform = PlatformManager.instance().getPlatformByLabel(label);
+		assertTrue(facebookPlatform instanceof FacebookPlatform);
 	}
 
 	@Test
