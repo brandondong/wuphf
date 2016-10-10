@@ -4,7 +4,6 @@ import core.model.Integration;
 import core.model.Platform;
 import core.schema.FieldValueMap;
 import core.schema.Fields;
-import facebook.schema.FacebookFields;
 
 public class FacebookPlatform implements Platform {
 

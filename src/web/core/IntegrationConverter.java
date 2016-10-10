@@ -15,13 +15,10 @@ public class IntegrationConverter {
 
 	private final FieldValueMap map;
 
-	private final Integration integration;
-
 	private IntegrationConverter(IntegrationWebModel webModel) {
 		this.webModel = webModel;
 		Platform platform = PlatformManager.instance().getPlatformByLabel(webModel.getPlatform().getLabel());
 		map = createFieldValueMap(platform.getFields(), webModel.getValueMap());
-		integration = platform.createIntegration(map);
 	}
 
 	public static IntegrationConverter from(IntegrationWebModel integration) {
@@ -29,7 +26,8 @@ public class IntegrationConverter {
 	}
 
 	public Integration convert() {
-		return integration;
+		Platform platform = PlatformManager.instance().getPlatformByLabel(webModel.getPlatform().getLabel());
+		return platform.createIntegration(map);
 	}
 
 	public String getIntegrationLabel() {

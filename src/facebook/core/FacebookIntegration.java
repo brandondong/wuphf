@@ -2,15 +2,14 @@ package facebook.core;
 
 import core.model.Integration;
 import core.schema.FieldValueMap;
-import facebook.schema.FacebookFields;
 
-public class FacebookIntegration implements Integration {
+class FacebookIntegration implements Integration {
 
 	private final String username;
 
 	private final String password;
 
-	FacebookIntegration(FieldValueMap fieldValueMap) {
+	public FacebookIntegration(FieldValueMap fieldValueMap) {
 		username = fieldValueMap.getValueForField(FacebookFields.EMAIL);
 		password = fieldValueMap.getValueForField(FacebookFields.PASSWORD);
 	}

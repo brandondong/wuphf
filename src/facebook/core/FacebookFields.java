@@ -1,10 +1,10 @@
-package facebook.schema;
+package facebook.core;
 
 import core.schema.Field;
 import core.schema.Fields;
 import core.schema.InputType;
 
-public class FacebookFields {
+class FacebookFields {
 
 	public static final Field EMAIL = Field.builder("Email").id().type(InputType.EMAIL).create();
 
