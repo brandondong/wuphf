@@ -14,12 +14,17 @@ import web.model.PlatformWebModel;
  */
 public class IntegrationService {
 
+	private final PlatformManager manager;
+
+	public IntegrationService(PlatformManager manager) {
+		this.manager = manager;
+	}
+
 	/**
 	 * @return a list of all possible platforms that can be created
 	 */
 	public List<PlatformWebModel> getAllPlatforms() {
-		return PlatformManager.instance().getAllPlatforms().stream().map(PlatformWebModel::createFrom)
-				.collect(toList());
+		return manager.getAllPlatforms().stream().map(PlatformWebModel::createFrom).collect(toList());
 	}
 
 	/**
@@ -29,7 +34,7 @@ public class IntegrationService {
 	 *            the message to be posted
 	 */
 	public void postMessage(MessageIntegrationWrapper message) {
-		message.getIntegrations().stream().map(i -> IntegrationConverter.from(i).convert())
+		message.getIntegrations().stream().map(i -> IntegrationConverter.from(i, manager).convert())
 				.forEach(i -> i.post(message.getMessage()));
 	}
 

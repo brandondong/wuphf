@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import core.model.PlatformManager;
 import web.core.IntegrationService;
 import web.message.MessageIntegrationWrapper;
 import web.model.PlatformWebModel;
@@ -18,7 +19,7 @@ import web.model.PlatformWebModel;
 @Path("/integration")
 public class IntegrationWebService {
 
-	private final IntegrationService service = new IntegrationService();
+	private final IntegrationService service = new IntegrationService(PlatformManager.instance());
 
 	@GET
 	@Path("/platforms")

@@ -15,18 +15,20 @@ public class IntegrationConverter {
 
 	private final FieldValueMap map;
 
-	private IntegrationConverter(IntegrationWebModel webModel) {
+	private PlatformManager manager;
+
+	private IntegrationConverter(IntegrationWebModel webModel, PlatformManager manager) {
 		this.webModel = webModel;
-		Platform platform = PlatformManager.instance().getPlatformByLabel(webModel.getPlatform().getLabel());
+		Platform platform = manager.getPlatformByLabel(webModel.getPlatform().getLabel());
 		map = createFieldValueMap(platform.getFields(), webModel.getValueMap());
 	}
 
-	public static IntegrationConverter from(IntegrationWebModel integration) {
-		return new IntegrationConverter(integration);
+	public static IntegrationConverter from(IntegrationWebModel integration, PlatformManager manager) {
+		return new IntegrationConverter(integration, manager);
 	}
 
 	public Integration convert() {
-		Platform platform = PlatformManager.instance().getPlatformByLabel(webModel.getPlatform().getLabel());
+		Platform platform = manager.getPlatformByLabel(webModel.getPlatform().getLabel());
 		return platform.createIntegration(map);
 	}
 
