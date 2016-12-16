@@ -34,8 +34,7 @@ public class IntegrationService {
 	 *            the message to be posted
 	 */
 	public void postMessage(MessageIntegrationWrapper message) {
-		message.getIntegrations().stream().map(i -> IntegrationConverter.from(i, manager).convert())
-				.forEach(i -> i.post(message.getMessage()));
+		IntegrationConverter.from(message.getIntegration(), manager).convert().post(message.getMessage());
 	}
 
 }

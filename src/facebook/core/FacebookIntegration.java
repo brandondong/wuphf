@@ -1,5 +1,8 @@
 package facebook.core;
 
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
 import core.model.Integration;
 import core.schema.FieldValueMap;
 
@@ -15,9 +18,8 @@ class FacebookIntegration implements Integration {
 	}
 
 	@Override
-	public void post(String message) {
-		// TODO Auto-generated method stub
-		System.out.println("Username: " + username + " Password: " + password);
+	public CompletableFuture<Optional<String>> post(String message) {
+		return CompletableFuture.completedFuture(Optional.of(("Username: " + username + " Password: " + password)));
 	}
 
 }

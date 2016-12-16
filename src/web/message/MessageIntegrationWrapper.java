@@ -1,7 +1,5 @@
 package web.message;
 
-import java.util.List;
-
 import web.model.IntegrationWebModel;
 
 /**
@@ -9,16 +7,16 @@ import web.model.IntegrationWebModel;
  */
 public class MessageIntegrationWrapper {
 
-	private List<IntegrationWebModel> integrations;
+	private IntegrationWebModel integration;
 
 	private String message;
 
-	public List<IntegrationWebModel> getIntegrations() {
-		return integrations;
+	public IntegrationWebModel getIntegration() {
+		return integration;
 	}
 
-	public void setIntegrations(List<IntegrationWebModel> integrations) {
-		this.integrations = integrations;
+	public void setIntegration(IntegrationWebModel integration) {
+		this.integration = integration;
 	}
 
 	public String getMessage() {

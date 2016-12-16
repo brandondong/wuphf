@@ -1,5 +1,8 @@
 package core.model;
 
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
 public interface Integration {
 
 	/**
@@ -7,7 +10,8 @@ public interface Integration {
 	 * 
 	 * @param message
 	 *            the status to post
+	 * @return a promised optional message when the post completes
 	 */
-	void post(String message);
+	CompletableFuture<Optional<String>> post(String message);
 
 }
