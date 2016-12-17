@@ -33,8 +33,7 @@ public class IntegrationWebService {
 	@POST
 	@Path("/post")
 	public void postMessage(MessageIntegrationWrapper message, @Suspended AsyncResponse response) {
-		service.postMessage(message);
-		response.resume("TODO, change this to service result");
+		service.postMessage(message).thenApply((s) -> response.resume(s)).exceptionally((t) -> response.resume(t));
 	}
 
 }

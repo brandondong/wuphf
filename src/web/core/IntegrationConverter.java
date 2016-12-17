@@ -15,10 +15,11 @@ public class IntegrationConverter {
 
 	private final FieldValueMap map;
 
-	private PlatformManager manager;
+	private final PlatformManager manager;
 
 	private IntegrationConverter(IntegrationWebModel webModel, PlatformManager manager) {
 		this.webModel = webModel;
+		this.manager = manager;
 		Platform platform = manager.getPlatformByLabel(webModel.getPlatform().getLabel());
 		map = createFieldValueMap(platform.getFields(), webModel.getValueMap());
 	}

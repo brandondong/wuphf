@@ -3,6 +3,7 @@ package web.core;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import core.model.PlatformManager;
 import web.message.MessageIntegrationWrapper;
@@ -13,6 +14,8 @@ import web.model.PlatformWebModel;
  * integrations
  */
 public class IntegrationService {
+
+	private static final String DEFAULT_COMPLETION_MESSAGE = "Post completed successfully.";
 
 	private final PlatformManager manager;
 
@@ -33,8 +36,9 @@ public class IntegrationService {
 	 * @param message
 	 *            the message to be posted
 	 */
-	public void postMessage(MessageIntegrationWrapper message) {
-		IntegrationConverter.from(message.getIntegration(), manager).convert().post(message.getMessage());
+	public CompletableFuture<String> postMessage(MessageIntegrationWrapper message) {
+		return IntegrationConverter.from(message.getIntegration(), manager).convert().post(message.getMessage())
+				.thenApply((opStr) -> opStr.orElse(DEFAULT_COMPLETION_MESSAGE));
 	}
 
 }
