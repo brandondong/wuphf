@@ -27,4 +27,10 @@ public class FacebookPlatform implements Platform {
 		return "facebook-logo.png";
 	}
 
+	@Override
+	public String getLoginRedirectUrl() {
+		// TODO register the app and acquire this
+		return "";
+	}
+
 }

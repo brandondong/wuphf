@@ -10,6 +10,8 @@ public class MockPlatform implements Platform {
 
 	public static final String LABEL = "mock-platform-label";
 
+	public static final String REDIRECT_URL = "mock://redirect";
+
 	public static final String ID_FIELD_LABEL = "mock-id-field-label";
 
 	public static final String USERNAME_LABEL = "mock-username-label";
@@ -43,6 +45,11 @@ public class MockPlatform implements Platform {
 	@Override
 	public String getLogoImageLink() {
 		return LOGO_LINK;
+	}
+
+	@Override
+	public String getLoginRedirectUrl() {
+		return REDIRECT_URL;
 	}
 
 }

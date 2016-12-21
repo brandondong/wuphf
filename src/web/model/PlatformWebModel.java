@@ -13,6 +13,8 @@ public class PlatformWebModel {
 
 	private String logo;
 
+	private String redirectUrl;
+
 	private List<FieldWebModel> fields;
 
 	/**
@@ -22,9 +24,10 @@ public class PlatformWebModel {
 	public PlatformWebModel() {
 	}
 
-	private PlatformWebModel(String label, String logo, List<FieldWebModel> fields) {
+	private PlatformWebModel(String label, String logo, String redirectUrl, List<FieldWebModel> fields) {
 		this.label = label;
 		this.logo = logo;
+		this.redirectUrl = redirectUrl;
 		this.fields = fields;
 	}
 
@@ -35,7 +38,7 @@ public class PlatformWebModel {
 	 * @return a {@link PlatformWebModel} based on the provided {@link Platform}
 	 */
 	public static PlatformWebModel createFrom(Platform platform) {
-		return new PlatformWebModel(platform.getLabel(), platform.getLogoImageLink(),
+		return new PlatformWebModel(platform.getLabel(), platform.getLogoImageLink(), platform.getLoginRedirectUrl(),
 				platform.getFields().stream().map(FieldWebModel::createFrom).collect(toList()));
 	}
 
@@ -61,6 +64,14 @@ public class PlatformWebModel {
 
 	public void setFields(List<FieldWebModel> fields) {
 		this.fields = fields;
+	}
+
+	public String getRedirectUrl() {
+		return redirectUrl;
+	}
+
+	public void setRedirectUrl(String redirectUrl) {
+		this.redirectUrl = redirectUrl;
 	}
 
 }

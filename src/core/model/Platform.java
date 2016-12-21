@@ -30,4 +30,11 @@ public interface Platform {
 	 */
 	String getLogoImageLink();
 
+	/**
+	 * 
+	 * @return the url to login to this platform which will redirect back once
+	 *         authenticated
+	 */
+	String getLoginRedirectUrl();
+
 }
