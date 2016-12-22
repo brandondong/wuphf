@@ -9,6 +9,8 @@ public class MessageIntegrationWrapper {
 
 	private IntegrationWebModel integration;
 
+	private IntegrationWebModel receiver;
+
 	private String message;
 
 	public IntegrationWebModel getIntegration() {
@@ -17,6 +19,14 @@ public class MessageIntegrationWrapper {
 
 	public void setIntegration(IntegrationWebModel integration) {
 		this.integration = integration;
+	}
+
+	public IntegrationWebModel getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(IntegrationWebModel receiver) {
+		this.receiver = receiver;
 	}
 
 	public String getMessage() {
