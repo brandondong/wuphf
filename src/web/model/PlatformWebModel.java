@@ -39,7 +39,7 @@ public class PlatformWebModel {
 	 */
 	public static PlatformWebModel createFrom(Platform platform) {
 		return new PlatformWebModel(platform.getLabel(), platform.getLogoImageLink(), platform.getLoginRedirectUrl(),
-				platform.getFields().stream().map(FieldWebModel::createFrom).collect(toList()));
+				platform.getUserFields().stream().map(FieldWebModel::createFrom).collect(toList()));
 	}
 
 	public String getLabel() {

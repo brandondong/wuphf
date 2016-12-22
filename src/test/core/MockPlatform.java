@@ -18,6 +18,8 @@ public class MockPlatform implements Platform {
 
 	public static final String PASSWORD_LABEL = "mock-password-label";
 
+	public static final Field ID_FIELD = Field.builder(ID_FIELD_LABEL).id().create();
+
 	public static final Field USERNAME_FIELD = Field.builder(USERNAME_LABEL).description("a mock username field")
 			.create();
 
@@ -32,9 +34,13 @@ public class MockPlatform implements Platform {
 	}
 
 	@Override
-	public Fields getFields() {
-		Field idField = Field.builder(ID_FIELD_LABEL).id().create();
-		return Fields.create(idField, USERNAME_FIELD, PASSWORD_FIELD);
+	public Fields getUserFields() {
+		return Fields.create(ID_FIELD, USERNAME_FIELD, PASSWORD_FIELD);
+	}
+
+	@Override
+	public Fields getReceiverFields() {
+		return Fields.create(ID_FIELD, USERNAME_FIELD);
 	}
 
 	@Override

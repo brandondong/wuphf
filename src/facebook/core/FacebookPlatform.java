@@ -13,8 +13,13 @@ public class FacebookPlatform implements Platform {
 	}
 
 	@Override
-	public Fields getFields() {
-		return FacebookFields.getFields();
+	public Fields getUserFields() {
+		return FacebookFields.getUserFields();
+	}
+
+	@Override
+	public Fields getReceiverFields() {
+		return FacebookFields.getReceiverFields();
 	}
 
 	@Override

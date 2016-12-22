@@ -1,12 +1,9 @@
 package web.core;
 
-import java.util.Map;
-
 import core.model.Integration;
 import core.model.Platform;
 import core.model.PlatformManager;
 import core.schema.FieldValueMap;
-import core.schema.Fields;
 import web.model.IntegrationWebModel;
 
 public class IntegrationConverter {
@@ -26,14 +23,8 @@ public class IntegrationConverter {
 
 	public Integration convert() {
 		Platform platform = manager.getPlatformByLabel(webModel.getPlatformLabel());
-		FieldValueMap map = createFieldValueMap(platform.getFields(), webModel.getValueMap());
+		FieldValueMap map = new FieldValueMapConverter(platform.getUserFields()).createMap(webModel.getValueMap());
 		return platform.createIntegration(map);
-	}
-
-	private FieldValueMap createFieldValueMap(Fields fields, Map<String, String> valueMap) {
-		FieldValueMap.Builder builder = FieldValueMap.builder(fields);
-		valueMap.keySet().forEach(f -> builder.setField(f, valueMap.get(f)));
-		return builder.create();
 	}
 
 }

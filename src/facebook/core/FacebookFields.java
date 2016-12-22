@@ -13,8 +13,12 @@ class FacebookFields {
 	private FacebookFields() {
 	}
 
-	public static Fields getFields() {
+	public static Fields getUserFields() {
 		return Fields.create(EMAIL, PASSWORD);
+	}
+
+	public static Fields getReceiverFields() {
+		return Fields.create(EMAIL);
 	}
 
 }

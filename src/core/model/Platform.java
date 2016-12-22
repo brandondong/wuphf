@@ -16,7 +16,13 @@ public interface Platform {
 	/**
 	 * @return the fields that can be edited when configuring an integration
 	 */
-	Fields getFields();
+	Fields getUserFields();
+
+	/**
+	 * @return the fields that can be edited when configuring another
+	 *         integration
+	 */
+	Fields getReceiverFields();
 
 	/**
 	 * @param fieldValueMap
