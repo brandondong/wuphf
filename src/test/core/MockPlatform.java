@@ -45,7 +45,7 @@ public class MockPlatform implements Platform {
 
 	@Override
 	public Integration createIntegration(FieldValueMap fieldValueMap) {
-		return new MockIntegration(fieldValueMap);
+		return new MockIntegration();
 	}
 
 	@Override

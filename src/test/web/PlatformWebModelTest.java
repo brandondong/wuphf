@@ -20,7 +20,7 @@ public class PlatformWebModelTest {
 		assertEquals(MockPlatform.LABEL, model.getLabel());
 		assertEquals(MockPlatform.LOGO_LINK, model.getLogo());
 		List<Field> fields = new MockPlatform().getUserFields().stream().collect(toList());
-		List<FieldWebModel> webFields = model.getFields();
+		List<FieldWebModel> webFields = model.getUserFields();
 		assertEquals(fields.size(), webFields.size());
 		for (int i = 0; i < fields.size(); i++) {
 			assertEquals(fields.get(i).getLabel(), webFields.get(i).getLabel());

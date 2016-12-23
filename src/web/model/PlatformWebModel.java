@@ -15,7 +15,9 @@ public class PlatformWebModel {
 
 	private String redirectUrl;
 
-	private List<FieldWebModel> fields;
+	private List<FieldWebModel> userFields;
+
+	private List<FieldWebModel> receiverFields;
 
 	/**
 	 * Public constructor for JAXB, use {{@link #createFrom(Platform)} to
@@ -24,11 +26,13 @@ public class PlatformWebModel {
 	public PlatformWebModel() {
 	}
 
-	private PlatformWebModel(String label, String logo, String redirectUrl, List<FieldWebModel> fields) {
+	private PlatformWebModel(String label, String logo, String redirectUrl, List<FieldWebModel> userFields,
+			List<FieldWebModel> receiverFields) {
 		this.label = label;
 		this.logo = logo;
 		this.redirectUrl = redirectUrl;
-		this.fields = fields;
+		this.userFields = userFields;
+		this.receiverFields = receiverFields;
 	}
 
 	/**
@@ -39,7 +43,8 @@ public class PlatformWebModel {
 	 */
 	public static PlatformWebModel createFrom(Platform platform) {
 		return new PlatformWebModel(platform.getLabel(), platform.getLogoImageLink(), platform.getLoginRedirectUrl(),
-				platform.getUserFields().stream().map(FieldWebModel::createFrom).collect(toList()));
+				platform.getUserFields().stream().map(FieldWebModel::createFrom).collect(toList()),
+				platform.getReceiverFields().stream().map(FieldWebModel::createFrom).collect(toList()));
 	}
 
 	public String getLabel() {
@@ -58,20 +63,28 @@ public class PlatformWebModel {
 		this.logo = logo;
 	}
 
-	public List<FieldWebModel> getFields() {
-		return fields;
-	}
-
-	public void setFields(List<FieldWebModel> fields) {
-		this.fields = fields;
-	}
-
 	public String getRedirectUrl() {
 		return redirectUrl;
 	}
 
 	public void setRedirectUrl(String redirectUrl) {
 		this.redirectUrl = redirectUrl;
+	}
+
+	public List<FieldWebModel> getUserFields() {
+		return userFields;
+	}
+
+	public void setUserFields(List<FieldWebModel> userFields) {
+		this.userFields = userFields;
+	}
+
+	public List<FieldWebModel> getReceiverFields() {
+		return receiverFields;
+	}
+
+	public void setReceiverFields(List<FieldWebModel> receiverFields) {
+		this.receiverFields = receiverFields;
 	}
 
 }

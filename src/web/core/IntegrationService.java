@@ -5,7 +5,9 @@ import static java.util.stream.Collectors.toList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import core.model.Integration;
 import core.model.PlatformManager;
+import core.schema.FieldValueMap;
 import web.message.MessageIntegrationWrapper;
 import web.model.PlatformWebModel;
 
@@ -15,7 +17,7 @@ import web.model.PlatformWebModel;
  */
 public class IntegrationService {
 
-	private static final String DEFAULT_COMPLETION_MESSAGE = "Post completed successfully.";
+	private static final String DEFAULT_COMPLETION_MESSAGE = "Message sent successfully.";
 
 	private final PlatformManager manager;
 
@@ -37,7 +39,9 @@ public class IntegrationService {
 	 *            the message to be posted
 	 */
 	public CompletableFuture<String> postMessage(MessageIntegrationWrapper message) {
-		return IntegrationConverter.from(message.getIntegration(), manager).convert().post(message.getMessage())
+		FieldValueMap receiver = ReceiverConverter.from(message.getReceiver(), manager).convert();
+		Integration integration = IntegrationConverter.from(message.getIntegration(), manager).convert();
+		return integration.message(message.getMessage(), receiver)
 				.thenApply((opStr) -> opStr.orElse(DEFAULT_COMPLETION_MESSAGE));
 	}
 
