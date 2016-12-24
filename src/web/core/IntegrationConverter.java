@@ -1,8 +1,8 @@
 package web.core;
 
+import core.model.IPlatformManager;
 import core.model.Integration;
 import core.model.Platform;
-import core.model.PlatformManager;
 import core.schema.FieldValueMap;
 import web.model.IntegrationWebModel;
 
@@ -10,14 +10,14 @@ public class IntegrationConverter {
 
 	private final IntegrationWebModel webModel;
 
-	private final PlatformManager manager;
+	private final IPlatformManager manager;
 
-	private IntegrationConverter(IntegrationWebModel webModel, PlatformManager manager) {
+	private IntegrationConverter(IntegrationWebModel webModel, IPlatformManager manager) {
 		this.webModel = webModel;
 		this.manager = manager;
 	}
 
-	public static IntegrationConverter from(IntegrationWebModel integration, PlatformManager manager) {
+	public static IntegrationConverter from(IntegrationWebModel integration, IPlatformManager manager) {
 		return new IntegrationConverter(integration, manager);
 	}
 

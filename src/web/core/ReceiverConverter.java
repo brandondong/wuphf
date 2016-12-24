@@ -1,7 +1,7 @@
 package web.core;
 
+import core.model.IPlatformManager;
 import core.model.Platform;
-import core.model.PlatformManager;
 import core.schema.FieldValueMap;
 import web.model.IntegrationWebModel;
 
@@ -9,14 +9,14 @@ public class ReceiverConverter {
 
 	private final IntegrationWebModel webModel;
 
-	private final PlatformManager manager;
+	private final IPlatformManager manager;
 
-	private ReceiverConverter(IntegrationWebModel webModel, PlatformManager manager) {
+	private ReceiverConverter(IntegrationWebModel webModel, IPlatformManager manager) {
 		this.webModel = webModel;
 		this.manager = manager;
 	}
 
-	public static ReceiverConverter from(IntegrationWebModel integration, PlatformManager manager) {
+	public static ReceiverConverter from(IntegrationWebModel integration, IPlatformManager manager) {
 		return new ReceiverConverter(integration, manager);
 	}
 

@@ -5,8 +5,8 @@ import static java.util.stream.Collectors.toList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import core.model.IPlatformManager;
 import core.model.Integration;
-import core.model.PlatformManager;
 import core.schema.FieldValueMap;
 import web.message.MessageIntegrationWrapper;
 import web.model.PlatformWebModel;
@@ -19,9 +19,9 @@ public class IntegrationService {
 
 	private static final String DEFAULT_COMPLETION_MESSAGE = "Message sent successfully.";
 
-	private final PlatformManager manager;
+	private final IPlatformManager manager;
 
-	public IntegrationService(PlatformManager manager) {
+	public IntegrationService(IPlatformManager manager) {
 		this.manager = manager;
 	}
 

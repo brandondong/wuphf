@@ -14,11 +14,11 @@ import facebook.core.FacebookPlatform;
 /**
  * A singleton for managing available platforms
  */
-public class PlatformManager {
+public class PlatformManager implements IPlatformManager {
 
 	private static final List<Platform> PLATFORMS = ImmutableList.of(new FacebookPlatform());
 
-	private static final PlatformManager instance = new PlatformManager();
+	private static final IPlatformManager instance = new PlatformManager();
 
 	private final Map<String, Platform> platformByLabel;
 
@@ -26,24 +26,16 @@ public class PlatformManager {
 		platformByLabel = PLATFORMS.stream().collect(toMap(p -> p.getLabel(), Function.identity()));
 	}
 
-	public static PlatformManager instance() {
+	public static IPlatformManager instance() {
 		return instance;
 	}
 
-	/**
-	 * @return a list of all possible platforms that can be created
-	 */
+	@Override
 	public List<Platform> getAllPlatforms() {
 		return PLATFORMS;
 	}
 
-	/**
-	 * @param platformLabel
-	 *            the label of the {@link Platform}
-	 * @return the matching {@link Platform} with the given label
-	 * @throws IllegalArgumentException
-	 *             if the label matches no valid platform
-	 */
+	@Override
 	public Platform getPlatformByLabel(String platformLabel) {
 		checkArgument(platformByLabel.containsKey(platformLabel),
 				String.format("No platform found with label %s.", platformLabel));
