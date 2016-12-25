@@ -8,6 +8,9 @@ import core.schema.Fields;
  */
 public interface Platform {
 
+	// TODO change this once hosted
+	public static final String APP_REDIRECT = "http://localhost:8080/wuphf/";
+
 	/**
 	 * @return a unique label identifying the platform
 	 */

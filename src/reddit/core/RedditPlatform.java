@@ -1,18 +1,16 @@
 package reddit.core;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import core.model.Integration;
 import core.model.Platform;
 import core.schema.FieldValueMap;
 import core.schema.Fields;
+import util.core.APIKeyReader;
 
 public class RedditPlatform implements Platform {
 
-	private static final String API_KEY = getKeyFromFile();
+	private static final String CLIENT_ID = new APIKeyReader().getKeyFromFile("reddit_client_id");
+
+	private static final String CLIENT_SECRET = new APIKeyReader().getKeyFromFile("reddit_client_secret");
 
 	@Override
 	public String getLabel() {
@@ -44,17 +42,9 @@ public class RedditPlatform implements Platform {
 
 	@Override
 	public String getLoginRedirectUrl() {
-		// TODO incorporate this into the reddit auth url
-		return API_KEY;
-	}
-
-	private static String getKeyFromFile() {
-		Path keyPath = Paths.get("keys/reddit");
-		try {
-			return Files.readAllLines(keyPath).get(0);
-		} catch (IOException e) {
-			throw new IllegalStateException("Expected to be able to read API key", e);
-		}
+		return String.format(
+				"https://www.reddit.com/api/v1/authorize?client_id=%s&response_type=code&state=wuphf&redirect_uri=%s&duration=permanent&scope=identity privatemessages",
+				CLIENT_ID, Platform.APP_REDIRECT);
 	}
 
 }
