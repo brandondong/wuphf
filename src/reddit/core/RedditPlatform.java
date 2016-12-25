@@ -1,5 +1,8 @@
 package reddit.core;
 
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+
 import core.model.Integration;
 import core.model.Platform;
 import core.schema.FieldValueMap;
@@ -30,6 +33,12 @@ public class RedditPlatform implements Platform {
 
 	@Override
 	public Integration createIntegration(FieldValueMap fieldValueMap) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CompletableFuture<FieldValueMap> createIntegrationFromRedirect(Map<String, String> properties) {
 		// TODO Auto-generated method stub
 		return null;
 	}

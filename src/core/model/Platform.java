@@ -1,5 +1,8 @@
 package core.model;
 
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+
 import core.schema.FieldValueMap;
 import core.schema.Fields;
 
@@ -33,6 +36,15 @@ public interface Platform {
 	 * @return a new {@link Integration} for this platform
 	 */
 	Integration createIntegration(FieldValueMap fieldValueMap);
+
+	/**
+	 * 
+	 * @param properties
+	 *            data fragments returned from the redirect login
+	 * @return a {@link FieldValueMap} holding the properties for a new
+	 *         integration
+	 */
+	CompletableFuture<FieldValueMap> createIntegrationFromRedirect(Map<String, String> properties);
 
 	/**
 	 * @return the filename of the platform branding logo image

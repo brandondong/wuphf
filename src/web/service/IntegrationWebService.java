@@ -14,6 +14,7 @@ import core.model.PlatformManager;
 import web.core.IntegrationService;
 import web.message.MessageIntegrationWrapper;
 import web.model.PlatformWebModel;
+import web.model.RedirectProperties;
 
 /**
  * Service for handling platform and integration related web requests
@@ -31,9 +32,16 @@ public class IntegrationWebService {
 	}
 
 	@POST
-	@Path("/post")
+	@Path("/message")
 	public void postMessage(MessageIntegrationWrapper message, @Suspended AsyncResponse response) {
 		service.postMessage(message).thenApply((s) -> response.resume(s)).exceptionally((t) -> response.resume(t));
+	}
+
+	@POST
+	@Path("/create")
+	public void createIntegrationFromRedirect(RedirectProperties properties, @Suspended AsyncResponse response) {
+		service.createIntegrationFromRedirect(properties).thenApply((i) -> response.resume(i))
+				.exceptionally((t) -> response.resume(t));
 	}
 
 }
