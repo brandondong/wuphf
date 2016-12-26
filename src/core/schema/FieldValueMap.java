@@ -56,6 +56,10 @@ public class FieldValueMap {
 			return this;
 		}
 
+		public Builder setField(Field field, String value) {
+			return setField(field.getLabel(), value);
+		}
+
 		public FieldValueMap create() {
 			return new FieldValueMap(fields, valueMap);
 		}

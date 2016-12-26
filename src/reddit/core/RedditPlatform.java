@@ -11,9 +11,9 @@ import util.core.APIKeyReader;
 
 public class RedditPlatform implements Platform {
 
-	private static final String CLIENT_ID = new APIKeyReader().getKeyFromFile("reddit_client_id");
+	public static final String CLIENT_ID = new APIKeyReader().getKeyFromFile("reddit_client_id");
 
-	private static final String CLIENT_SECRET = new APIKeyReader().getKeyFromFile("reddit_client_secret");
+	public static final String CLIENT_SECRET = new APIKeyReader().getKeyFromFile("reddit_client_secret");
 
 	@Override
 	public String getLabel() {
@@ -22,8 +22,7 @@ public class RedditPlatform implements Platform {
 
 	@Override
 	public Fields getUserFields() {
-		// TODO Auto-generated method stub
-		return null;
+		return RedditFields.getUserFields();
 	}
 
 	@Override
@@ -39,8 +38,14 @@ public class RedditPlatform implements Platform {
 
 	@Override
 	public CompletableFuture<FieldValueMap> createIntegrationFromRedirect(Map<String, String> properties) {
-		// TODO Auto-generated method stub
-		return null;
+		return new RedditTokenRetriever().getToken(properties).thenCompose(this::createMapWithToken);
+	}
+
+	private CompletableFuture<FieldValueMap> createMapWithToken(String accessToken) {
+		FieldValueMap.Builder mapBuilder = FieldValueMap.builder(getUserFields()).setField(RedditFields.ACCESS_TOKEN,
+				accessToken);
+		// TODO retrieve username info
+		return CompletableFuture.completedFuture(mapBuilder.create());
 	}
 
 	@Override
