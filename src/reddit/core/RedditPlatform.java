@@ -32,8 +32,7 @@ public class RedditPlatform implements Platform {
 
 	@Override
 	public Integration createIntegration(FieldValueMap fieldValueMap) {
-		// TODO Auto-generated method stub
-		return null;
+		return new RedditIntegration(fieldValueMap.getValueForField(RedditFields.ACCESS_TOKEN));
 	}
 
 	@Override
@@ -44,8 +43,8 @@ public class RedditPlatform implements Platform {
 	private CompletableFuture<FieldValueMap> createMapWithToken(String accessToken) {
 		FieldValueMap.Builder mapBuilder = FieldValueMap.builder(getUserFields()).setField(RedditFields.ACCESS_TOKEN,
 				accessToken);
-		// TODO retrieve username info
-		return CompletableFuture.completedFuture(mapBuilder.create());
+		return new RedditOAuthService(accessToken).getUsername()
+				.thenApply((u) -> mapBuilder.setField(RedditFields.USERNAME, u).create());
 	}
 
 	@Override
