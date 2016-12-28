@@ -19,7 +19,7 @@ class MockIntegration implements Integration {
 	}
 
 	@Override
-	public CompletableFuture<Optional<String>> message(String message, FieldValueMap receiver) {
+	public CompletableFuture<Optional<String>> message(String subject, String message, FieldValueMap receiver) {
 		new MockPlatform().getReceiverFields().stream().forEach(f -> {
 			checkNotNull(receiver.getValueForField(f));
 		});

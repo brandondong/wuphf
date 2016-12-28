@@ -10,12 +10,14 @@ public interface Integration {
 	/**
 	 * Sends a message to the specified receiving integration
 	 * 
+	 * @param subject
+	 *            the subject of the message
 	 * @param message
 	 *            the message to send
 	 * @param receiver
 	 *            the receiving account of the message
 	 * @return a promised optional message when the post completes
 	 */
-	CompletableFuture<Optional<String>> message(String message, FieldValueMap receiver);
+	CompletableFuture<Optional<String>> message(String subject, String message, FieldValueMap receiver);
 
 }

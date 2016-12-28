@@ -15,9 +15,10 @@ class RedditIntegration implements Integration {
 	}
 
 	@Override
-	public CompletableFuture<Optional<String>> message(String message, FieldValueMap receiver) {
-		// TODO Auto-generated method stub
-		return CompletableFuture.completedFuture(Optional.of(accessToken));
+	public CompletableFuture<Optional<String>> message(String subject, String message, FieldValueMap receiver) {
+		return new RedditOAuthService(accessToken)
+				.sendMessage(receiver.getValueForField(RedditFields.USERNAME), subject, message)
+				.thenApply((v) -> Optional.empty());
 	}
 
 }

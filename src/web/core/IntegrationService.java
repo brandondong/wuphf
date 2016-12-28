@@ -44,7 +44,7 @@ public class IntegrationService {
 	public CompletableFuture<String> postMessage(MessageIntegrationWrapper message) {
 		FieldValueMap receiver = ReceiverConverter.from(message.getReceiver(), manager).convert();
 		Integration integration = IntegrationConverter.from(message.getIntegration(), manager).convert();
-		return integration.message(message.getMessage(), receiver)
+		return integration.message(message.getSubject(), message.getMessage(), receiver)
 				.thenApply((opStr) -> opStr.orElse(DEFAULT_COMPLETION_MESSAGE));
 	}
 
