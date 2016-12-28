@@ -40,10 +40,10 @@ public class RedditPlatform implements Platform {
 		return new RedditTokenRetriever().getToken(properties).thenCompose(this::createMapWithToken);
 	}
 
-	private CompletableFuture<FieldValueMap> createMapWithToken(String accessToken) {
+	private CompletableFuture<FieldValueMap> createMapWithToken(RedditToken accessToken) {
 		FieldValueMap.Builder mapBuilder = FieldValueMap.builder(getUserFields()).setField(RedditFields.ACCESS_TOKEN,
-				accessToken);
-		return new RedditOAuthService(accessToken).getUsername()
+				accessToken.getAccessToken());
+		return new RedditOAuthService(accessToken.getAccessToken()).getUsername()
 				.thenApply((u) -> mapBuilder.setField(RedditFields.USERNAME, u).create());
 	}
 

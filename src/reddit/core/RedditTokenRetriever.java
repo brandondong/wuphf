@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -30,7 +32,7 @@ public class RedditTokenRetriever {
 
 	private static final String TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
 
-	public CompletableFuture<String> getToken(Map<String, String> parameters) {
+	public CompletableFuture<RedditToken> getToken(Map<String, String> parameters) {
 		return CompletableFuture.supplyAsync(() -> {
 			if (parameters.containsKey(ERROR)) {
 				throw new IllegalStateException(String.format("Failed to login: %s.", parameters.get(ERROR)));
@@ -38,28 +40,47 @@ public class RedditTokenRetriever {
 			String code = parameters.get(CODE);
 
 			try {
-				URL url = new URL(TOKEN_URL);
-				HttpURLConnection http = (HttpURLConnection) url.openConnection();
-				http.setRequestMethod("POST");
-				http.setDoOutput(true);
-
-				addHeaders(http);
-
-				byte[] out = getPostData(code);
-				http.setFixedLengthStreamingMode(out.length);
-				http.connect();
-				try (OutputStream os = http.getOutputStream()) {
-					os.write(out);
-				}
-
-				String result = new BufferedReader(new InputStreamReader(http.getInputStream())).lines()
-						.collect(joining("\n"));
-				return new JSONObject(result).getString("access_token");
+				byte[] out = transformPostData(getPostParameters(code));
+				JSONObject json = sendPostRequest(out);
+				String access = json.getString("access_token");
+				String refresh = json.getString("refresh_token");
+				long expiresIn = json.getLong("expires_in");
+				return new RedditToken(access, refresh, expiresIn);
 			} catch (IOException | JSONException e) {
 				throw new IllegalStateException(e);
 			}
 		});
+	}
 
+	public CompletableFuture<RedditToken> refreshToken(RedditToken token) {
+		return CompletableFuture.supplyAsync(() -> {
+			try {
+				byte[] out = transformPostData(getRefreshPostParameters(token.getRefreshToken()));
+				JSONObject json = sendPostRequest(out);
+				String access = json.getString("access_token");
+				long expiresIn = json.getLong("expires_in");
+				return new RedditToken(access, token.getRefreshToken(), expiresIn);
+			} catch (IOException | JSONException e) {
+				throw new IllegalStateException(e);
+			}
+		});
+	}
+
+	private JSONObject sendPostRequest(byte[] out)
+			throws MalformedURLException, IOException, ProtocolException, JSONException {
+		URL url = new URL(TOKEN_URL);
+		HttpURLConnection http = (HttpURLConnection) url.openConnection();
+		http.setRequestMethod("POST");
+		http.setDoOutput(true);
+
+		addHeaders(http);
+		http.setFixedLengthStreamingMode(out.length);
+		http.connect();
+		try (OutputStream os = http.getOutputStream()) {
+			os.write(out);
+		}
+		String result = new BufferedReader(new InputStreamReader(http.getInputStream())).lines().collect(joining("\n"));
+		return new JSONObject(result);
 	}
 
 	private void addHeaders(HttpURLConnection http) {
@@ -68,9 +89,9 @@ public class RedditTokenRetriever {
 		http.setRequestProperty("User-agent", "wuphf");
 	}
 
-	private byte[] getPostData(String code) throws UnsupportedEncodingException {
+	private byte[] transformPostData(Map<String, String> parameters) throws UnsupportedEncodingException {
 		StringJoiner sj = new StringJoiner("&");
-		for (Map.Entry<String, String> entry : getPostParameters(code).entrySet())
+		for (Map.Entry<String, String> entry : parameters.entrySet())
 			sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "=" + URLEncoder.encode(entry.getValue(), "UTF-8"));
 		byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
 		return out;
@@ -81,6 +102,13 @@ public class RedditTokenRetriever {
 		params.put("grant_type", "authorization_code");
 		params.put(CODE, code);
 		params.put("redirect_uri", Platform.APP_REDIRECT);
+		return params;
+	}
+
+	private Map<String, String> getRefreshPostParameters(String token) {
+		Map<String, String> params = new HashMap<>();
+		params.put("grant_type", "refresh_token");
+		params.put("refresh_token", token);
 		return params;
 	}
 
