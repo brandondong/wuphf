@@ -45,7 +45,7 @@ public class RedditTokenRetriever {
 				String access = json.getString("access_token");
 				String refresh = json.getString("refresh_token");
 				long expiresIn = json.getLong("expires_in");
-				return new RedditToken(access, refresh, expiresIn);
+				return RedditToken.expiresIn(access, refresh, expiresIn);
 			} catch (IOException | JSONException e) {
 				throw new IllegalStateException(e);
 			}
@@ -59,7 +59,7 @@ public class RedditTokenRetriever {
 				JSONObject json = sendPostRequest(out);
 				String access = json.getString("access_token");
 				long expiresIn = json.getLong("expires_in");
-				return new RedditToken(access, token.getRefreshToken(), expiresIn);
+				return RedditToken.expiresIn(access, token.getRefreshToken(), expiresIn);
 			} catch (IOException | JSONException e) {
 				throw new IllegalStateException(e);
 			}

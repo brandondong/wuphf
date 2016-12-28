@@ -8,15 +8,17 @@ import core.schema.FieldValueMap;
 
 class RedditIntegration implements Integration {
 
-	private final String accessToken;
+	private final RedditToken accessToken;
 
-	public RedditIntegration(String accessToken) {
-		this.accessToken = accessToken;
+	public RedditIntegration(FieldValueMap valueMap) {
+		accessToken = RedditToken.expiresAt(valueMap.getValueForField(RedditFields.ACCESS_TOKEN),
+				valueMap.getValueForField(RedditFields.REFRESH_TOKEN),
+				valueMap.getValueForField(RedditFields.EXPIRES_AT));
 	}
 
 	@Override
 	public CompletableFuture<Optional<String>> message(String subject, String message, FieldValueMap receiver) {
-		return new RedditOAuthService(accessToken)
+		return new RedditOAuthService(accessToken.getAccessToken())
 				.sendMessage(receiver.getValueForField(RedditFields.USERNAME), subject, message)
 				.thenApply((v) -> Optional.empty());
 	}

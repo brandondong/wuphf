@@ -32,7 +32,7 @@ public class RedditPlatform implements Platform {
 
 	@Override
 	public Integration createIntegration(FieldValueMap fieldValueMap) {
-		return new RedditIntegration(fieldValueMap.getValueForField(RedditFields.ACCESS_TOKEN));
+		return new RedditIntegration(fieldValueMap);
 	}
 
 	@Override
@@ -40,10 +40,12 @@ public class RedditPlatform implements Platform {
 		return new RedditTokenRetriever().getToken(properties).thenCompose(this::createMapWithToken);
 	}
 
-	private CompletableFuture<FieldValueMap> createMapWithToken(RedditToken accessToken) {
-		FieldValueMap.Builder mapBuilder = FieldValueMap.builder(getUserFields()).setField(RedditFields.ACCESS_TOKEN,
-				accessToken.getAccessToken());
-		return new RedditOAuthService(accessToken.getAccessToken()).getUsername()
+	private CompletableFuture<FieldValueMap> createMapWithToken(RedditToken token) {
+		FieldValueMap.Builder mapBuilder = FieldValueMap.builder(getUserFields())
+				.setField(RedditFields.ACCESS_TOKEN, token.getAccessToken())
+				.setField(RedditFields.REFRESH_TOKEN, token.getRefreshToken())
+				.setField(RedditFields.EXPIRES_AT, token.getExpiryDate());
+		return new RedditOAuthService(token.getAccessToken()).getUsername()
 				.thenApply((u) -> mapBuilder.setField(RedditFields.USERNAME, u).create());
 	}
 
