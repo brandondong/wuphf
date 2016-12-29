@@ -18,8 +18,9 @@ class FacebookIntegration implements Integration {
 	}
 
 	@Override
-	public CompletableFuture<Optional<String>> message(String subject, String message, FieldValueMap receiver) {
-		return CompletableFuture.completedFuture(Optional.of(("Username: " + username + " Password: " + password)));
+	public CompletableFuture<Optional<FieldValueMap>> message(String subject, String message, FieldValueMap receiver) {
+		System.out.println(username + password);
+		return CompletableFuture.completedFuture(Optional.empty());
 	}
 
 }

@@ -10,8 +10,6 @@ import core.schema.FieldValueMap;
 
 class MockIntegration implements Integration {
 
-	public static final String COMPLETION_MESSAGE = "Mock post completed";
-
 	public MockIntegration(FieldValueMap map) {
 		new MockPlatform().getUserFields().stream().forEach(f -> {
 			checkNotNull(map.getValueForField(f));
@@ -19,11 +17,11 @@ class MockIntegration implements Integration {
 	}
 
 	@Override
-	public CompletableFuture<Optional<String>> message(String subject, String message, FieldValueMap receiver) {
+	public CompletableFuture<Optional<FieldValueMap>> message(String subject, String message, FieldValueMap receiver) {
 		new MockPlatform().getReceiverFields().stream().forEach(f -> {
 			checkNotNull(receiver.getValueForField(f));
 		});
-		return CompletableFuture.completedFuture(Optional.of(COMPLETION_MESSAGE));
+		return CompletableFuture.completedFuture(Optional.empty());
 	}
 
 }

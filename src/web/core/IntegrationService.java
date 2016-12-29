@@ -20,8 +20,6 @@ import web.model.RedirectProperties;
  */
 public class IntegrationService {
 
-	private static final String DEFAULT_COMPLETION_MESSAGE = "Message sent successfully.";
-
 	private final IPlatformManager manager;
 
 	public IntegrationService(IPlatformManager manager) {
@@ -41,11 +39,13 @@ public class IntegrationService {
 	 * @param message
 	 *            the message to be posted
 	 */
-	public CompletableFuture<String> postMessage(MessageIntegrationWrapper message) {
+	public CompletableFuture<IntegrationWebModel> postMessage(MessageIntegrationWrapper message) {
+		Platform platform = manager.getPlatformByLabel(message.getIntegration().getPlatformLabel());
 		FieldValueMap receiver = ReceiverConverter.from(message.getReceiver(), manager).convert();
 		Integration integration = IntegrationConverter.from(message.getIntegration(), manager).convert();
-		return integration.message(message.getSubject(), message.getMessage(), receiver)
-				.thenApply((opStr) -> opStr.orElse(DEFAULT_COMPLETION_MESSAGE));
+		return integration.message(message.getSubject(), message.getMessage(), receiver).thenApply((opfVM) -> {
+			return opfVM.map((fvm) -> IntegrationWebModel.createFrom(fvm, platform)).orElse(message.getIntegration());
+		});
 	}
 
 	public CompletableFuture<IntegrationWebModel> createIntegrationFromRedirect(RedirectProperties properties) {

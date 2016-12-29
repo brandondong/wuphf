@@ -34,7 +34,7 @@ public class IntegrationWebService {
 	@POST
 	@Path("/message")
 	public void postMessage(MessageIntegrationWrapper message, @Suspended AsyncResponse response) {
-		service.postMessage(message).thenApply((s) -> response.resume(s)).exceptionally((t) -> response.resume(t));
+		service.postMessage(message).thenApply((i) -> response.resume(i)).exceptionally((t) -> response.resume(t));
 	}
 
 	@POST

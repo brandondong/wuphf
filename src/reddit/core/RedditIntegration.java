@@ -17,7 +17,7 @@ class RedditIntegration implements Integration {
 	}
 
 	@Override
-	public CompletableFuture<Optional<String>> message(String subject, String message, FieldValueMap receiver) {
+	public CompletableFuture<Optional<FieldValueMap>> message(String subject, String message, FieldValueMap receiver) {
 		return new RedditOAuthService(accessToken.getAccessToken())
 				.sendMessage(receiver.getValueForField(RedditFields.USERNAME), subject, message)
 				.thenApply((v) -> Optional.empty());

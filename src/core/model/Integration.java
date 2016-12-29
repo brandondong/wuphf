@@ -16,8 +16,9 @@ public interface Integration {
 	 *            the message to send
 	 * @param receiver
 	 *            the receiving account of the message
-	 * @return a promised optional message when the post completes
+	 * @return a promised optional {@link FieldValueMap} when the post completes
+	 *         if the integration changed
 	 */
-	CompletableFuture<Optional<String>> message(String subject, String message, FieldValueMap receiver);
+	CompletableFuture<Optional<FieldValueMap>> message(String subject, String message, FieldValueMap receiver);
 
 }
