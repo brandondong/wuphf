@@ -28,8 +28,8 @@ public class RedditOAuthService {
 
 	private final String accessToken;
 
-	public RedditOAuthService(String accessToken) {
-		this.accessToken = accessToken;
+	public RedditOAuthService(RedditToken token) {
+		accessToken = token.getAccessToken();
 	}
 
 	public CompletableFuture<String> getUsername() {

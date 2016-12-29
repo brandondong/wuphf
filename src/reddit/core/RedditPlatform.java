@@ -45,7 +45,7 @@ public class RedditPlatform implements Platform {
 				.setField(RedditFields.ACCESS_TOKEN, token.getAccessToken())
 				.setField(RedditFields.REFRESH_TOKEN, token.getRefreshToken())
 				.setField(RedditFields.EXPIRES_AT, token.getExpiryDate());
-		return new RedditOAuthService(token.getAccessToken()).getUsername()
+		return new RedditOAuthService(token).getUsername()
 				.thenApply((u) -> mapBuilder.setField(RedditFields.USERNAME, u).create());
 	}
 
