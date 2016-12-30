@@ -10,13 +10,14 @@ import java.util.function.Function;
 import com.google.common.collect.ImmutableList;
 
 import facebook.core.FacebookPlatform;
+import reddit.core.RedditPlatform;
 
 /**
  * A singleton for managing available platforms
  */
 public class PlatformManager implements IPlatformManager {
 
-	private static final List<Platform> PLATFORMS = ImmutableList.of(new FacebookPlatform());
+	private static final List<Platform> PLATFORMS = ImmutableList.of(new FacebookPlatform(), new RedditPlatform());
 
 	private static final IPlatformManager instance = new PlatformManager();
 

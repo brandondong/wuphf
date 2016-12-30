@@ -51,8 +51,7 @@ public class RedditPlatform implements Platform {
 
 	@Override
 	public String getLogoImageLink() {
-		// TODO Auto-generated method stub
-		return null;
+		return "reddit-logo.png";
 	}
 
 	@Override
