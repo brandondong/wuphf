@@ -1,3 +1,5 @@
 /build/
 /target/
 /keys/
+/node_modules/
+/WebContent/js/
