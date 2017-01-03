@@ -7,13 +7,8 @@ import core.model.Integration;
 import core.model.Platform;
 import core.schema.FieldValueMap;
 import core.schema.Fields;
-import util.core.APIKeyReader;
 
 public class RedditPlatform implements Platform {
-
-	public static final String CLIENT_ID = new APIKeyReader().getKeyFromFile("reddit_client_id");
-
-	public static final String CLIENT_SECRET = new APIKeyReader().getKeyFromFile("reddit_client_secret");
 
 	@Override
 	public String getLabel() {
@@ -58,7 +53,7 @@ public class RedditPlatform implements Platform {
 	public String getLoginRedirectUrl() {
 		return String.format(
 				"https://www.reddit.com/api/v1/authorize?client_id=%s&response_type=code&state=wuphf&redirect_uri=%s&duration=permanent&scope=identity privatemessages",
-				CLIENT_ID, Platform.APP_REDIRECT);
+				IRedditAppDetails.getDefault().getClientId(), Platform.APP_REDIRECT);
 	}
 
 }

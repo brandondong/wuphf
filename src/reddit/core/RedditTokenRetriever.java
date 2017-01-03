@@ -113,8 +113,9 @@ public class RedditTokenRetriever {
 	}
 
 	private String getAuthorizationHeader() {
-		String encoding = Base64.getEncoder().encodeToString(
-				String.format("%s:%s", RedditPlatform.CLIENT_ID, RedditPlatform.CLIENT_SECRET).getBytes());
+		IRedditAppDetails details = IRedditAppDetails.getDefault();
+		String encoding = Base64.getEncoder()
+				.encodeToString(String.format("%s:%s", details.getClientId(), details.getClientSecret()).getBytes());
 		return String.format("Basic %s", encoding);
 	}
 
