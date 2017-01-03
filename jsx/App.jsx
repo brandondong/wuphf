@@ -6,6 +6,7 @@ export default class App extends React.Component {
 		return (
 			<div>
 				<MainNavbar/>
+				<div className="container">Hello</div>
 			</div>
 		);
 	}
