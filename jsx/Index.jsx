@@ -1,7 +1,8 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import MainNavbar from './MainNavbar.jsx';
 
-export default class App extends React.Component {
+class Index extends React.Component {
 	render() {
 		return (
 			<div>
@@ -11,3 +12,5 @@ export default class App extends React.Component {
 		);
 	}
 }
+
+ReactDOM.render(<Index/>, document.getElementById('app'));

@@ -1,24 +1,27 @@
 var config = {
-   entry: './jsx/main.js',
-	
-   output: {
-      path:'./WebContent/js',
-      filename: 'index.js',
-   },
-	
-   module: {
-      loaders: [
-         {
-            test: /\.jsx?$/,
-            exclude: /node_modules/,
-            loader: 'babel',
-				
-            query: {
-               presets: ['es2015', 'react']
-            }
-         }
-      ]
-   }
+	entry: {
+		index: './jsx/Index.jsx',
+		integrations: './jsx/Integrations.jsx',
+		people: './jsx/People.jsx',
+		messaging: './jsx/Messaging.jsx'
+	},
+
+	output: {
+		path:'./WebContent/js',
+		filename: '[name].entry.js',
+	},
+
+	module: {
+		loaders: [{
+			test: /\.jsx?$/,
+		    exclude: /node_modules/,
+		    loader: 'babel',
+
+		    query: {
+		    	presets: ['es2015', 'react']
+		    }
+		}]
+	}
 }
 
 module.exports = config;
