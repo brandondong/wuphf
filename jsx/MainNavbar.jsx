@@ -9,13 +9,13 @@ export default class MainNavbar extends React.Component {
 			<Navbar>
 				<Navbar.Header>
 					<Navbar.Brand>
-						<a>Wuphf</a>
+						<a href="/wuphf">Wuphf</a>
 					</Navbar.Brand>
 				</Navbar.Header>
 					<Nav>
-						<NavItem eventKey={1}>Integrations</NavItem>
-						<NavItem eventKey={1}>People</NavItem>
-						<NavItem eventKey={1}>Messaging</NavItem>
+						<NavItem href="/wuphf/integrations.html">Integrations</NavItem>
+						<NavItem href="/wuphf/people.html">People</NavItem>
+						<NavItem href="/wuphf/messaging.html">Messaging</NavItem>
 					</Nav>
 			</Navbar>
 		);
