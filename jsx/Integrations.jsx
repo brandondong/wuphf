@@ -55,17 +55,31 @@ class NewIntegrationSection extends React.Component {
 		});
 	}
 	
+	wrapInPlatformLink(platform, jsx) {
+		return (
+			<a href={platform.redirectUrl} onClick={() => this.saveCurrentPlatform(platform)}>
+				{jsx}
+			</a>
+		);
+	}
+		
+	saveCurrentPlatform(platform) {
+		new LocalStorageManager().saveCurrentPlatform(platform.label);
+	}
+	
 	render() {
-		let platforms = this.state.platforms.map(function (platform) {
+		let platforms = this.state.platforms.map((platform) => {
 			let imagePath = "images/" + platform.logo;
+			let logo = this.wrapInPlatformLink(platform,
+				<Image src={imagePath} width={57} height={57} thumbnail/>
+			);
+			let label = this.wrapInPlatformLink(platform,
+				<p>{platform.label}</p>
+			);
 			return (
 				<Col xs={3} md={2} key={platform.label}>
-					<a href={platform.redirectUrl}>
-						<Image src={imagePath} width={57} height={57} thumbnail/>
-					</a>
-					<a href={platform.redirectUrl}>
-						<p>{platform.label}</p>
-					</a>
+					{logo}
+					{label}
 				</Col>
 			);
 		});
