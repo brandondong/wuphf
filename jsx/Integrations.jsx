@@ -59,10 +59,12 @@ class NewIntegrationSection extends React.Component {
 		let platforms = this.state.platforms.map(function (platform) {
 			let imagePath = "images/" + platform.logo;
 			return (
-				<Col xs={6} md={4} key={platform.label}>
+				<Col xs={3} md={2} key={platform.label}>
 					<a href={platform.redirectUrl}>
 						<Image src={imagePath} width={57} height={57} thumbnail/>
-						<h3>{platform.label}</h3>
+					</a>
+					<a href={platform.redirectUrl}>
+						<p>{platform.label}</p>
 					</a>
 				</Col>
 			);
