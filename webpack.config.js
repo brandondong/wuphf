@@ -3,7 +3,8 @@ var config = {
 		index: './jsx/Index.jsx',
 		integrations: './jsx/Integrations.jsx',
 		people: './jsx/People.jsx',
-		messaging: './jsx/Messaging.jsx'
+		messaging: './jsx/Messaging.jsx',
+		oauth: './jsx/OAuth.jsx'
 	},
 
 	output: {

@@ -10,13 +10,13 @@ export default class MainNavbar extends React.Component {
 			<Navbar>
 				<Navbar.Header>
 					<Navbar.Brand>
-						<a href="/wuphf">Wuphf</a>
+						<a href="index.html">Wuphf</a>
 					</Navbar.Brand>
 				</Navbar.Header>
 					<Nav>
-						<NavItem href="/wuphf/integrations.html">Integrations</NavItem>
-						<NavItem href="/wuphf/people.html">People</NavItem>
-						<NavItem href="/wuphf/messaging.html">Messaging</NavItem>
+						<NavItem href="integrations.html">Integrations</NavItem>
+						<NavItem href="people.html">People</NavItem>
+						<NavItem href="messaging.html">Messaging</NavItem>
 					</Nav>
 			</Navbar>
 		);

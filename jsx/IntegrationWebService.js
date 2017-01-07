@@ -1,4 +1,4 @@
-const PLATFORM_URL = "/wuphf/rest/integration/platforms";
+const PLATFORM_URL = "rest/integration/platforms";
 
 export default class IntegrationWebService {
 	
