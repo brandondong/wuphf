@@ -35,3 +35,11 @@ export class MainJumbotron extends React.Component {
 		);
 	}
 }
+
+export class IntegrationsJumbotron extends React.Component {
+	render() {
+		return (
+			<MainJumbotron title="Integrations" message="Filler for now"/>
+		);
+	}
+}

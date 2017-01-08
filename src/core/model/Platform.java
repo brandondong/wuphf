@@ -12,7 +12,7 @@ import core.schema.Fields;
 public interface Platform {
 
 	// TODO change this once hosted
-	public static final String APP_REDIRECT = "http://localhost:8080/wuphf/";
+	public static final String APP_REDIRECT = "http://localhost:8080/wuphf/oauth.html";
 
 	/**
 	 * @return a unique label identifying the platform

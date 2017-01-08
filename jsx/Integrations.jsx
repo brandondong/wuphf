@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MainNavbar, {MainJumbotron} from './MainNavbar.jsx';
+import MainNavbar, {IntegrationsJumbotron} from './MainNavbar.jsx';
 import LocalStorageManager from './LocalStorageManager.js';
 import PageHeader from 'react-bootstrap/lib/PageHeader';
 import Row from 'react-bootstrap/lib/Row';
@@ -20,7 +20,7 @@ class Integrations extends React.Component {
 		return (
 			<div>
 				<MainNavbar/>
-				<MainJumbotron title="Integrations" message="Filler for now"/>
+				<IntegrationsJumbotron/>
 				<div className="container">
 					<ExistingIntegrationsSection integrations={this.state.integrations}/>
 					<NewIntegrationSection integrations={this.state.integrations}/>
