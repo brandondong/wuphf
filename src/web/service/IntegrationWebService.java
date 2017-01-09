@@ -33,12 +33,14 @@ public class IntegrationWebService {
 
 	@POST
 	@Path("/message")
+	@Produces(MediaType.APPLICATION_JSON)
 	public void postMessage(MessageIntegrationWrapper message, @Suspended AsyncResponse response) {
 		service.postMessage(message).thenApply((i) -> response.resume(i)).exceptionally((t) -> response.resume(t));
 	}
 
 	@POST
 	@Path("/create")
+	@Produces(MediaType.APPLICATION_JSON)
 	public void createIntegrationFromRedirect(RedirectProperties properties, @Suspended AsyncResponse response) {
 		service.createIntegrationFromRedirect(properties).thenApply((i) -> response.resume(i))
 				.exceptionally((t) -> response.resume(t));
