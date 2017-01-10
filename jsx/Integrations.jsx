@@ -13,7 +13,10 @@ class Integrations extends React.Component {
 	constructor() {
 		super();
 		let manager = new LocalStorageManager();
-		this.state = {integrations: manager.getIntegrations()};
+		this.state = {integrations: manager.getIntegrations(), platforms: []};
+		new IntegrationWebService().getPlatforms().then((platforms) => {
+			this.setState({platforms: platforms});
+		});
 	}
 	
 	render() {
@@ -22,8 +25,8 @@ class Integrations extends React.Component {
 				<MainNavbar/>
 				<IntegrationsJumbotron/>
 				<div className="container">
-					<ExistingIntegrationsSection integrations={this.state.integrations}/>
-					<NewIntegrationSection integrations={this.state.integrations}/>
+					<ExistingIntegrationsSection integrations={this.state.integrations} platforms={this.state.platforms}/>
+					<NewIntegrationSection integrations={this.state.integrations} platforms={this.state.platforms}/>
 				</div>
 			</div>
 		);
@@ -32,10 +35,7 @@ class Integrations extends React.Component {
 
 class ExistingIntegrationsSection extends React.Component {
 	render() {
-		let content = "None";
-		if (this.props.integrations.length > 0) {
-			content = "Got some";
-		}
+		let content = "No integrations have been created yet.";
 		return (
 			<div>
 				<PageHeader>Existing integrations</PageHeader>
@@ -46,14 +46,6 @@ class ExistingIntegrationsSection extends React.Component {
 }
 
 class NewIntegrationSection extends React.Component {
-	
-	constructor() {
-		super();
-		this.state = {platforms: []};
-		new IntegrationWebService().getPlatforms().then((platforms) => {
-			this.setState({platforms: platforms});
-		});
-	}
 	
 	wrapInPlatformLink(platform, jsx) {
 		return (
@@ -68,7 +60,7 @@ class NewIntegrationSection extends React.Component {
 	}
 	
 	render() {
-		let platforms = this.state.platforms.map((platform) => {
+		let platforms = this.props.platforms.map((platform) => {
 			let imagePath = "images/" + platform.logo;
 			let logo = this.wrapInPlatformLink(platform,
 				<Image src={imagePath} width={57} height={57} thumbnail/>

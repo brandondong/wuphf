@@ -7,9 +7,15 @@ export default class LocalStorageManager {
 	getIntegrations() {
 		let integrations = localStorage.getItem(INTEGRATIONS_KEY);
 		if (integrations == null) {
-			return [];
+			return {};
 		}
 		return JSON.parse(integrations);
+	}
+	
+	saveIntegration(i) {
+		let integrations = this.getIntegrations();
+		integrations[i.platformLabel] = i;
+		localStorage.setItem(INTEGRATIONS_KEY, JSON.stringify(integrations));
 	}
 	
 	saveCurrentPlatform(platformLabel) {

@@ -17,9 +17,11 @@ class OAuth extends React.Component {
 			let index = param.indexOf("=");
 			map[param.substring(0, index)] = param.substring(index + 1);
 		}
-		let platformLabel = new LocalStorageManager().getCurrentPlatform();
+		let manager = new LocalStorageManager();
+		let platformLabel = manager.getCurrentPlatform();
 		new IntegrationWebService().createIntegration(platformLabel, map).then((i) => {
 			this.setState({progress: "Integration created successfully."});
+			manager.saveIntegration(i);
 		}).catch((e) => {
 			this.setState({progress: "An unexpected error occurred.", error: e});
 		});
