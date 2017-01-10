@@ -35,7 +35,8 @@ public class RedditTokenRetriever {
 	public CompletableFuture<RedditToken> getToken(Map<String, String> parameters) {
 		return CompletableFuture.supplyAsync(() -> {
 			if (parameters.containsKey(ERROR)) {
-				throw new IllegalStateException(String.format("Failed to login: %s.", parameters.get(ERROR)));
+				throw new IllegalStateException(
+						String.format("Failed to grant permissions: %s.", parameters.get(ERROR)));
 			}
 			String code = parameters.get(CODE);
 

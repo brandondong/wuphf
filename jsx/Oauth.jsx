@@ -9,7 +9,7 @@ class OAuth extends React.Component {
 	
 	constructor() {
 		super();
-		this.state = {progress: "Processing authentication and creating integration. Please wait a moment ..."};
+		this.state = {progress: "Processing authentication and creating integration. Please wait a moment ...", error: null};
 		
 		let map = {};
 		let params = window.location.search.substring(1).split("&");
@@ -21,7 +21,7 @@ class OAuth extends React.Component {
 		new IntegrationWebService().createIntegration(platformLabel, map).then((i) => {
 			this.setState({progress: "Integration created successfully."});
 		}).catch((e) => {
-			this.setState({progress: "Error!"});
+			this.setState({progress: "An unexpected error occurred.", error: e});
 		});
 	}
 	
@@ -32,6 +32,7 @@ class OAuth extends React.Component {
 				<IntegrationsJumbotron/>
 				<div className="container">
 					<h1>{this.state.progress}</h1>
+					<p>{this.state.error}</p>
 					<Button bsSize="large" href="integrations.html">Back to main integrations page</Button>
 				</div>
 			</div>
