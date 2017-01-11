@@ -34,8 +34,34 @@ class Integrations extends React.Component {
 }
 
 class ExistingIntegrationsSection extends React.Component {
+	
+	createIntegrationDisplay(platform, integration) {
+		let imagePath = "images/" + platform.logo;
+		return (
+			<Col xs={3} md={2} key={platform.label}>
+				<Image src={imagePath} width={57} height={57} thumbnail/>
+				<p>{platform.label}</p>
+			</Col>
+		);
+	}
+	
 	render() {
+		let integrations = Object.values(this.props.integrations);
+		let platformMap = {};
+		for (let platform of this.props.platforms) {
+			platformMap[platform.label] = platform;
+		}
 		let content = "No integrations have been created yet.";
+		if (integrations.length > 0) {
+			let jsx = [];
+			for (let integration of integrations) {
+				let platform = platformMap[integration.platformLabel];
+				if (platform != null) {
+					jsx.push(this.createIntegrationDisplay(platform, integration));
+				}
+			}
+			content = <Row>{jsx}</Row>;
+		}
 		return (
 			<div>
 				<PageHeader>Existing integrations</PageHeader>
@@ -60,7 +86,9 @@ class NewIntegrationSection extends React.Component {
 	}
 	
 	render() {
-		let platforms = this.props.platforms.map((platform) => {
+		let platforms = this.props.platforms.filter((platform) => {
+			return this.props.integrations[platform.label] == null;
+		}).map((platform) => {
 			let imagePath = "images/" + platform.logo;
 			let logo = this.wrapInPlatformLink(platform,
 				<Image src={imagePath} width={57} height={57} thumbnail/>
