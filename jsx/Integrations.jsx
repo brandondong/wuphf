@@ -6,6 +6,9 @@ import PageHeader from 'react-bootstrap/lib/PageHeader';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Image from 'react-bootstrap/lib/Image';
+import Button from 'react-bootstrap/lib/Button';
+import Popover from 'react-bootstrap/lib/Popover';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import IntegrationWebService from './IntegrationWebService.js';
 
 class Integrations extends React.Component {
@@ -38,9 +41,16 @@ class ExistingIntegrationsSection extends React.Component {
 	createIntegrationDisplay(platform, integration) {
 		let imagePath = "images/" + platform.logo;
 		let integrationLabel = integration.valueMap[this.getIdField(platform)];
+		let popover = (
+			<Popover id="popover-trigger-click-root-close" title="Options">
+				<Button>Edit</Button>{' '}<Button bsStyle="danger">Delete</Button>
+			</Popover>
+		);
 		return (
 			<Col xs={3} md={2} key={platform.label}>
-				<Image src={imagePath} width={57} height={57} thumbnail/>
+				<OverlayTrigger trigger="click" rootClose placement="top" overlay={popover}>
+					<Image src={imagePath} width={57} height={57} className="cursor-pointer" thumbnail/>
+				</OverlayTrigger>
 				<p>{integrationLabel}</p>
 			</Col>
 		);

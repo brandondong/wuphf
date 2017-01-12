@@ -1,3 +1,7 @@
 img.img-thumbnail:hover {
 	border-color: #428bca;
 }
+
+img.cursor-pointer {
+	cursor: pointer;
+}
