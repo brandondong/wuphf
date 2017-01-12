@@ -37,12 +37,22 @@ class ExistingIntegrationsSection extends React.Component {
 	
 	createIntegrationDisplay(platform, integration) {
 		let imagePath = "images/" + platform.logo;
+		let integrationLabel = integration.valueMap[this.getIdField(platform)];
 		return (
 			<Col xs={3} md={2} key={platform.label}>
 				<Image src={imagePath} width={57} height={57} thumbnail/>
-				<p>{platform.label}</p>
+				<p>{integrationLabel}</p>
 			</Col>
 		);
+	}
+	
+	getIdField(platform) {
+		for (let field of platform.userFields) {
+			if (field.idField) {
+				return field.label;
+			}
+		}
+		throw new Error("Failed to find user id field");
 	}
 	
 	render() {
