@@ -17,9 +17,17 @@ class Integrations extends React.Component {
 		super();
 		let manager = new LocalStorageManager();
 		this.state = {integrations: manager.getIntegrations(), platforms: []};
+		this.deleteIntegration = this.deleteIntegration.bind(this);
 		new IntegrationWebService().getPlatforms().then((platforms) => {
 			this.setState({platforms: platforms});
 		});
+	}
+	
+	deleteIntegration(integration) {
+		let integrations = JSON.parse(JSON.stringify(this.state.integrations));
+		delete integrations[integration.platformLabel];
+		this.setState({integrations: integrations})
+		new LocalStorageManager().saveIntegrations(integrations);
 	}
 	
 	render() {
@@ -28,7 +36,7 @@ class Integrations extends React.Component {
 				<MainNavbar/>
 				<IntegrationsJumbotron/>
 				<div className="container">
-					<ExistingIntegrationsSection integrations={this.state.integrations} platforms={this.state.platforms}/>
+					<ExistingIntegrationsSection integrations={this.state.integrations} platforms={this.state.platforms} deleteHandler={this.deleteIntegration}/>
 					<NewIntegrationSection integrations={this.state.integrations} platforms={this.state.platforms}/>
 				</div>
 			</div>
@@ -43,7 +51,9 @@ class ExistingIntegrationsSection extends React.Component {
 		let integrationLabel = integration.valueMap[this.getIdField(platform)];
 		let popover = (
 			<Popover id="popover-trigger-click-root-close" title="Options">
-				<Button>Edit</Button>{' '}<Button bsStyle="danger">Delete</Button>
+				<Button href={platform.redirectUrl} onClick={() => this.saveCurrentPlatform(platform)}>Edit</Button>
+				{' '}
+				<Button bsStyle="danger" onClick={() => this.props.deleteHandler(integration)}>Delete</Button>
 			</Popover>
 		);
 		return (
@@ -63,6 +73,10 @@ class ExistingIntegrationsSection extends React.Component {
 			}
 		}
 		throw new Error("Failed to find user id field");
+	}
+	
+	saveCurrentPlatform(platform) {
+		new LocalStorageManager().saveCurrentPlatform(platform.label);
 	}
 	
 	render() {

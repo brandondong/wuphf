@@ -18,6 +18,10 @@ export default class LocalStorageManager {
 		localStorage.setItem(INTEGRATIONS_KEY, JSON.stringify(integrations));
 	}
 	
+	saveIntegrations(integrations) {
+		localStorage.setItem(INTEGRATIONS_KEY, JSON.stringify(integrations));
+	}
+	
 	saveCurrentPlatform(platformLabel) {
 		localStorage.setItem(CURRENT_PLATFORM_KEY, platformLabel);
 	}
