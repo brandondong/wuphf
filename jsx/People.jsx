@@ -7,6 +7,8 @@ import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import FormControl from 'react-bootstrap/lib/FormControl';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import HelpBlock from 'react-bootstrap/lib/HelpBlock';
 
 class People extends React.Component {
 	
@@ -69,7 +71,8 @@ class ContactModal extends React.Component {
 		super();
 		this.handleChange = this.handleChange.bind(this);
 		this.add = this.add.bind(this);
-		this.state = {value: null};
+		this.hide = this.hide.bind(this);
+		this.state = {value: ""};
 	}
 	
 	handleChange(e) {
@@ -78,22 +81,34 @@ class ContactModal extends React.Component {
 	add() {
 		this.props.hide();
 		this.props.add(this.state.value);
+		this.setState({value: ""});
+	}
+	
+	hide() {
+		this.props.hide();
+		this.setState({value: ""});
 	}
 	
 	render() {
+		let error = this.props.people[this.state.value] != null;
+		let validationState = error ? "error" : null;
+		let errorText = error ? "A contact with this name already exists." : null;
 		return (
-			<Modal show={this.props.showModal} onHide={this.props.hide}>
+			<Modal show={this.props.showModal} onHide={this.hide}>
 				<Modal.Header closeButton>
 					<Modal.Title>Add contact</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<ControlLabel>Contact name</ControlLabel>
-					<FormControl type="text" onChange={this.handleChange}/>
+					<FormGroup validationState={validationState}>
+						<ControlLabel>Contact name</ControlLabel>
+						<FormControl type="text" onChange={this.handleChange}/>
+						<HelpBlock>{errorText}</HelpBlock>
+					</FormGroup>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button onClick={this.add}>Add</Button>
+					<Button onClick={this.add} disabled={error || this.state.value.length == 0}>Add</Button>
 					{' '}
-					<Button onClick={this.props.hide}>Cancel</Button>
+					<Button onClick={this.hide}>Cancel</Button>
 				</Modal.Footer>
 			</Modal>
 		);
