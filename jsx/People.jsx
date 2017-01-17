@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import MainNavbar, {MainJumbotron} from './MainNavbar.jsx';
 import LocalStorageManager from './LocalStorageManager.js';
+import IntegrationWebService from './IntegrationWebService.js';
 import PageHeader from 'react-bootstrap/lib/PageHeader';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
@@ -9,6 +10,9 @@ import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import HelpBlock from 'react-bootstrap/lib/HelpBlock';
+import Panel from 'react-bootstrap/lib/Panel';
+import Collapse from 'react-bootstrap/lib/Collapse';
+import Well from 'react-bootstrap/lib/Well';
 
 class People extends React.Component {
 	
@@ -17,7 +21,10 @@ class People extends React.Component {
 		this.hideModal = this.hideModal.bind(this);
 		this.addContact = this.addContact.bind(this);
 		let manager = new LocalStorageManager();
-		this.state = {showModal: false, people: manager.getPeople()};
+		this.state = {showModal: false, people: manager.getPeople(), platforms: []};
+		new IntegrationWebService().getPlatforms().then((platforms) => {
+			this.setState({platforms: platforms});
+		});
 	}
 	
 	hideModal() {
@@ -37,7 +44,7 @@ class People extends React.Component {
 				<MainNavbar/>
 				<MainJumbotron title="People" message="Filler for now"/>
 				<div className="container">
-					<ContactsSection people={this.state.people}/>
+					<ContactsSection people={this.state.people} platforms={this.state.platforms}/>
 					<Button bsSize="large" onClick={() => this.setState({showModal: true})}>Add contact</Button>
 				</div>
 				<ContactModal showModal={this.state.showModal} hide={this.hideModal} add={this.addContact} people={this.state.people}/>
@@ -47,12 +54,33 @@ class People extends React.Component {
 }
 
 class ContactsSection extends React.Component {
+	
+	constructor() {
+		super();
+		this.state = {openPanels: {}};
+	}
+	
+	togglePanel(name) {
+		let isOpen = this.state.openPanels[name];
+		let openPanels = JSON.parse(JSON.stringify(this.state.openPanels));
+		openPanels[name] = !isOpen;
+		this.setState({openPanels: openPanels});
+	}
+	
 	render() {
 		let peoplejsx = [];
 		for (let name in this.props.people) {
 			peoplejsx.push(
 				<div key={name}>
-					<p>{name}</p>
+					<Panel onClick={() => this.togglePanel(name)}>
+						{name}
+					</Panel>
+					<Collapse in={this.state.openPanels[name]}>
+					<div><Well>
+						<p>Existing integrations</p>
+						<p>Create a new integration</p>
+					</Well></div>
+					</Collapse>
 				</div>
 			);
 		}
