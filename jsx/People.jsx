@@ -13,22 +13,31 @@ import HelpBlock from 'react-bootstrap/lib/HelpBlock';
 import Panel from 'react-bootstrap/lib/Panel';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Well from 'react-bootstrap/lib/Well';
+import Col from 'react-bootstrap/lib/Col';
+import Row from 'react-bootstrap/lib/Row';
+import Image from 'react-bootstrap/lib/Image';
 
 class People extends React.Component {
 	
 	constructor() {
 		super();
-		this.hideModal = this.hideModal.bind(this);
+		this.hideContactModal = this.hideContactModal.bind(this);
+		this.hideCreateModal = this.hideCreateModal.bind(this);
 		this.addContact = this.addContact.bind(this);
+		this.handleCreate = this.handleCreate.bind(this);
 		let manager = new LocalStorageManager();
-		this.state = {showModal: false, people: manager.getPeople(), platforms: []};
+		this.state = {showContactModal: false, showCreateModal: false, people: manager.getPeople(), platforms: [], createName: null, createPlatform: null};
 		new IntegrationWebService().getPlatforms().then((platforms) => {
 			this.setState({platforms: platforms});
 		});
 	}
 	
-	hideModal() {
-		this.setState({showModal: false});
+	hideContactModal() {
+		this.setState({showContactModal: false});
+	}
+	
+	hideCreateModal() {
+		this.setState({showCreateModal: false});
 	}
 	
 	addContact(s) {
@@ -38,16 +47,21 @@ class People extends React.Component {
 		new LocalStorageManager().savePeople(people);
 	}
 	
+	handleCreate(name, platform) {
+		this.setState({showCreateModal: true, createName: name, createPlatform: platform});
+	}
+	
 	render() {
 		return (
 			<div>
 				<MainNavbar/>
 				<MainJumbotron title="People" message="Filler for now"/>
 				<div className="container">
-					<ContactsSection people={this.state.people} platforms={this.state.platforms}/>
-					<Button bsSize="large" onClick={() => this.setState({showModal: true})}>Add contact</Button>
+					<ContactsSection people={this.state.people} platforms={this.state.platforms} create={this.handleCreate}/>
+					<Button bsSize="large" onClick={() => this.setState({showContactModal: true})}>Add contact</Button>
 				</div>
-				<ContactModal showModal={this.state.showModal} hide={this.hideModal} add={this.addContact} people={this.state.people}/>
+				<ContactModal showModal={this.state.showContactModal} hide={this.hideContactModal} add={this.addContact} people={this.state.people}/>
+				<CreateIntegrationModal showModal={this.state.showCreateModal} hide={this.hideCreateModal} name={this.state.createName} platform={this.state.createPlatform}/>
 			</div>
 		);
 	}
@@ -67,18 +81,34 @@ class ContactsSection extends React.Component {
 		this.setState({openPanels: openPanels});
 	}
 	
+	createIntegrations(name) {
+		let platforms = this.props.platforms.map((platform) => {
+			let imagePath = "images/" + platform.logo;
+			return (
+				<Col xs={3} md={2} key={platform.label}>
+					<Image src={imagePath} width={57} height={57} className="cursor-pointer" onClick={() => this.props.create(name, platform)} thumbnail/>
+					<p>{platform.label}</p>
+				</Col>
+			);
+		});
+		return (
+			<Row>{platforms}</Row>
+		);
+	}
+	
 	render() {
 		let peoplejsx = [];
 		for (let name in this.props.people) {
 			peoplejsx.push(
 				<div key={name}>
-					<Panel onClick={() => this.togglePanel(name)}>
+					<Panel onClick={() => this.togglePanel(name)} className="cursor-pointer">
 						{name}
 					</Panel>
 					<Collapse in={this.state.openPanels[name]}>
 					<div><Well>
-						<p>Existing integrations</p>
-						<p>Create a new integration</p>
+						<h3>Existing integrations</h3>
+						<h3>Create a new integration</h3>
+						{this.createIntegrations(name)}
 					</Well></div>
 					</Collapse>
 				</div>
@@ -137,6 +167,30 @@ class ContactModal extends React.Component {
 					<Button onClick={this.add} disabled={error || this.state.value.length == 0}>Add</Button>
 					{' '}
 					<Button onClick={this.hide}>Cancel</Button>
+				</Modal.Footer>
+			</Modal>
+		);
+	}
+}
+
+class CreateIntegrationModal extends React.Component {
+	render() {
+		if (this.props.name == null) {
+			return null;
+		}
+		return (
+			<Modal show={this.props.showModal} onHide={this.props.hide}>
+				<Modal.Header closeButton>
+					<Modal.Title>Create a new integration</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<p>{this.props.name}</p>
+					<p>{this.props.platform.label}</p>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button>Add</Button>
+					{' '}
+					<Button onClick={this.props.hide}>Cancel</Button>
 				</Modal.Footer>
 			</Modal>
 		);
