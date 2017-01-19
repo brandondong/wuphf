@@ -128,7 +128,6 @@ class ContactModal extends React.Component {
 	constructor() {
 		super();
 		this.handleChange = this.handleChange.bind(this);
-		this.add = this.add.bind(this);
 		this.hide = this.hide.bind(this);
 		this.state = {value: ""};
 	}
@@ -136,10 +135,16 @@ class ContactModal extends React.Component {
 	handleChange(e) {
 		this.setState({value: e.target.value});
 	}
-	add() {
+	
+	add(e, error) {
+		if (error) {
+			return false;
+		}
 		this.props.hide();
 		this.props.add(this.state.value);
 		this.setState({value: ""});
+		e.preventDefault();
+		return true;
 	}
 	
 	hide() {
@@ -157,14 +162,16 @@ class ContactModal extends React.Component {
 					<Modal.Title>Add contact</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<FormGroup validationState={validationState}>
-						<ControlLabel>Contact name</ControlLabel>
-						<FormControl type="text" onChange={this.handleChange}/>
-						<HelpBlock>{errorText}</HelpBlock>
-					</FormGroup>
+					<form id="contact-form" onSubmit={(e) => this.add(e, error)}>
+						<FormGroup validationState={validationState}>
+							<ControlLabel>Contact name</ControlLabel>
+							<FormControl type="text" onChange={this.handleChange}/>
+							<HelpBlock>{errorText}</HelpBlock>
+						</FormGroup>
+					</form>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button onClick={this.add} disabled={error || this.state.value.length == 0}>Add</Button>
+					<Button type="submit" form="contact-form" disabled={error || this.state.value.length == 0}>Add</Button>
 					{' '}
 					<Button onClick={this.hide}>Cancel</Button>
 				</Modal.Footer>
@@ -174,21 +181,42 @@ class ContactModal extends React.Component {
 }
 
 class CreateIntegrationModal extends React.Component {
+	
+	constructor() {
+		super();
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+	
+	handleSubmit(e) {
+		this.props.hide();
+		e.preventDefault();
+	}
+	
 	render() {
 		if (this.props.name == null) {
 			return null;
 		}
+		let fields = this.props.platform.receiverFields.map((field) => {
+			return (
+				<FormGroup key={field.label}>
+					<ControlLabel>{field.label}</ControlLabel>
+					<FormControl type={field.type.toLowerCase()} placeholder={field.description}/>
+				</FormGroup>
+			);
+		});
 		return (
 			<Modal show={this.props.showModal} onHide={this.props.hide}>
 				<Modal.Header closeButton>
 					<Modal.Title>Create a new integration</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<p>{this.props.name}</p>
-					<p>{this.props.platform.label}</p>
+					<h3>{this.props.platform.label}</h3>
+					<form id="create-form" onSubmit={this.handleSubmit}>
+						{fields}
+					</form>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button>Add</Button>
+					<Button type="submit" form="create-form">Add</Button>
 					{' '}
 					<Button onClick={this.props.hide}>Cancel</Button>
 				</Modal.Footer>
