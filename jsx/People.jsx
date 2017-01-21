@@ -25,6 +25,7 @@ class People extends React.Component {
 		this.hideCreateModal = this.hideCreateModal.bind(this);
 		this.addContact = this.addContact.bind(this);
 		this.handleCreate = this.handleCreate.bind(this);
+		this.handleCreateSubmit = this.handleCreateSubmit.bind(this);
 		let manager = new LocalStorageManager();
 		this.state = {showContactModal: false, showCreateModal: false, people: manager.getPeople(), platforms: [], createName: null, createPlatform: null};
 		new IntegrationWebService().getPlatforms().then((platforms) => {
@@ -51,6 +52,13 @@ class People extends React.Component {
 		this.setState({showCreateModal: true, createName: name, createPlatform: platform});
 	}
 	
+	handleCreateSubmit(integration) {
+		let people = JSON.parse(JSON.stringify(this.state.people));
+		let currentPerson = people[this.state.createName];
+		currentPerson.push({valueMap: integration, platformLabel: this.state.createPlatform.label});
+		this.setState({people: people});
+	}
+	
 	render() {
 		return (
 			<div>
@@ -61,7 +69,7 @@ class People extends React.Component {
 					<Button bsSize="large" onClick={() => this.setState({showContactModal: true})}>Add contact</Button>
 				</div>
 				<ContactModal showModal={this.state.showContactModal} hide={this.hideContactModal} add={this.addContact} people={this.state.people}/>
-				<CreateIntegrationModal showModal={this.state.showCreateModal} hide={this.hideCreateModal} name={this.state.createName} platform={this.state.createPlatform}/>
+				<CreateIntegrationModal showModal={this.state.showCreateModal} hide={this.hideCreateModal} name={this.state.createName} platform={this.state.createPlatform} create={this.handleCreateSubmit}/>
 			</div>
 		);
 	}
@@ -96,6 +104,17 @@ class ContactsSection extends React.Component {
 		);
 	}
 	
+	existingIntegrations(name) {
+		let integrations = this.props.people[name].map((integration, index) => {
+			return (
+				<p key={index}>{integration.platformLabel}</p>
+			);
+		});
+		return (
+			<div>{integrations}</div>
+		);
+	}
+	
 	render() {
 		let peoplejsx = [];
 		for (let name in this.props.people) {
@@ -107,6 +126,7 @@ class ContactsSection extends React.Component {
 					<Collapse in={this.state.openPanels[name]}>
 					<div><Well>
 						<h3>Existing integrations</h3>
+						{this.existingIntegrations(name)}
 						<h3>Create a new integration</h3>
 						{this.createIntegrations(name)}
 					</Well></div>
@@ -165,13 +185,13 @@ class ContactModal extends React.Component {
 					<form id="contact-form" onSubmit={(e) => this.add(e, error)}>
 						<FormGroup validationState={validationState}>
 							<ControlLabel>Contact name</ControlLabel>
-							<FormControl type="text" onChange={this.handleChange}/>
+							<FormControl type="text" onChange={this.handleChange} required/>
 							<HelpBlock>{errorText}</HelpBlock>
 						</FormGroup>
 					</form>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button type="submit" form="contact-form" disabled={error || this.state.value.length == 0}>Add</Button>
+					<Button type="submit" form="contact-form" disabled={error}>Add</Button>
 					{' '}
 					<Button onClick={this.hide}>Cancel</Button>
 				</Modal.Footer>
@@ -184,12 +204,19 @@ class CreateIntegrationModal extends React.Component {
 	
 	constructor() {
 		super();
+		this.fields = {};
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 	
 	handleSubmit(e) {
 		this.props.hide();
+		this.props.create(this.fields);
+		this.fields = {};
 		e.preventDefault();
+	}
+	
+	fieldChanged(e, field) {
+		this.fields[field.label] = e.target.value;
 	}
 	
 	render() {
@@ -200,7 +227,7 @@ class CreateIntegrationModal extends React.Component {
 			return (
 				<FormGroup key={field.label}>
 					<ControlLabel>{field.label}</ControlLabel>
-					<FormControl type={field.type.toLowerCase()} placeholder={field.description}/>
+					<FormControl type={field.type.toLowerCase()} placeholder={field.description} onChange={(e) => this.fieldChanged(e, field)} required/>
 				</FormGroup>
 			);
 		});
