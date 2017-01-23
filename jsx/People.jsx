@@ -16,6 +16,8 @@ import Well from 'react-bootstrap/lib/Well';
 import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import Image from 'react-bootstrap/lib/Image';
+import Popover from 'react-bootstrap/lib/Popover';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 
 class People extends React.Component {
 	
@@ -26,6 +28,7 @@ class People extends React.Component {
 		this.addContact = this.addContact.bind(this);
 		this.handleCreate = this.handleCreate.bind(this);
 		this.handleCreateSubmit = this.handleCreateSubmit.bind(this);
+		this.handleDeleteIntegration = this.handleDeleteIntegration.bind(this);
 		let manager = new LocalStorageManager();
 		this.state = {showContactModal: false, showCreateModal: false, people: manager.getPeople(), platforms: [], createName: null, createPlatform: null};
 		new IntegrationWebService().getPlatforms().then((platforms) => {
@@ -44,8 +47,7 @@ class People extends React.Component {
 	addContact(s) {
 		let people = JSON.parse(JSON.stringify(this.state.people));
 		people[s] = [];
-		this.setState({people: people});
-		new LocalStorageManager().savePeople(people);
+		this.savePeople(people);
 	}
 	
 	handleCreate(name, platform) {
@@ -56,7 +58,18 @@ class People extends React.Component {
 		let people = JSON.parse(JSON.stringify(this.state.people));
 		let currentPerson = people[this.state.createName];
 		currentPerson.push({valueMap: integration, platformLabel: this.state.createPlatform.label});
+		this.savePeople(people);
+	}
+	
+	handleDeleteIntegration(name, index) {
+		let people = JSON.parse(JSON.stringify(this.state.people));
+		people[name].splice(index, 1);
+		this.savePeople(people);
+	}
+	
+	savePeople(people) {
 		this.setState({people: people});
+		new LocalStorageManager().savePeople(people);
 	}
 	
 	render() {
@@ -65,7 +78,7 @@ class People extends React.Component {
 				<MainNavbar/>
 				<MainJumbotron title="People" message="Filler for now"/>
 				<div className="container">
-					<ContactsSection people={this.state.people} platforms={this.state.platforms} create={this.handleCreate}/>
+					<ContactsSection people={this.state.people} platforms={this.state.platforms} create={this.handleCreate} deleteHandler={this.handleDeleteIntegration}/>
 					<Button bsSize="large" onClick={() => this.setState({showContactModal: true})}>Add contact</Button>
 				</div>
 				<ContactModal showModal={this.state.showContactModal} hide={this.hideContactModal} add={this.addContact} people={this.state.people}/>
@@ -106,13 +119,47 @@ class ContactsSection extends React.Component {
 	
 	existingIntegrations(name) {
 		let integrations = this.props.people[name].map((integration, index) => {
+			let platform = this.getPlatformWithLabel(integration);
+			if (platform == null) {
+				return null;
+			}
+			let imagePath = "images/" + platform.logo;
+			let integrationLabel = integration.valueMap[this.getIdField(platform)];
+			let popover = (
+				<Popover id="popover-trigger-click-root-close" title="Options">
+					<Button bsStyle="danger" onClick={() => this.props.deleteHandler(name, index)}>Delete</Button>
+				</Popover>
+			);
 			return (
-				<p key={index}>{integration.platformLabel}</p>
+				<Col xs={3} md={2} key={index}>
+					<OverlayTrigger trigger="click" rootClose placement="top" overlay={popover}>
+						<Image src={imagePath} width={57} height={57} className="cursor-pointer" thumbnail/>
+					</OverlayTrigger>
+					<p>{integrationLabel}</p>
+				</Col>
 			);
 		});
 		return (
-			<div>{integrations}</div>
+			<Row>{integrations}</Row>
 		);
+	}
+	
+	getPlatformWithLabel(integration) {
+		for (let platform of this.props.platforms) {
+			if (platform.label == integration.platformLabel) {
+				return platform;
+			}
+		}
+		return null;
+	}
+	
+	getIdField(platform) {
+		for (let field of platform.userFields) {
+			if (field.idField) {
+				return field.label;
+			}
+		}
+		throw new Error("Failed to find user id field");
 	}
 	
 	render() {
