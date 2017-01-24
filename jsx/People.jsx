@@ -25,12 +25,15 @@ class People extends React.Component {
 		super();
 		this.hideContactModal = this.hideContactModal.bind(this);
 		this.hideCreateModal = this.hideCreateModal.bind(this);
+		this.hideDeleteModal = this.hideDeleteModal.bind(this);
+		this.openDeleteModal = this.openDeleteModal.bind(this);
 		this.addContact = this.addContact.bind(this);
 		this.handleCreate = this.handleCreate.bind(this);
 		this.handleCreateSubmit = this.handleCreateSubmit.bind(this);
 		this.handleDeleteIntegration = this.handleDeleteIntegration.bind(this);
+		this.handleDeleteContact = this.handleDeleteContact.bind(this);
 		let manager = new LocalStorageManager();
-		this.state = {showContactModal: false, showCreateModal: false, people: manager.getPeople(), platforms: [], createName: null, createPlatform: null};
+		this.state = {showContactModal: false, showCreateModal: false, showDeleteModal: false, people: manager.getPeople(), platforms: [], createName: null, createPlatform: null, deleteName: null};
 		new IntegrationWebService().getPlatforms().then((platforms) => {
 			this.setState({platforms: platforms});
 		});
@@ -42,6 +45,10 @@ class People extends React.Component {
 	
 	hideCreateModal() {
 		this.setState({showCreateModal: false});
+	}
+	
+	hideDeleteModal() {
+		this.setState({showDeleteModal: false});
 	}
 	
 	addContact(s) {
@@ -67,6 +74,16 @@ class People extends React.Component {
 		this.savePeople(people);
 	}
 	
+	handleDeleteContact() {
+		let people = JSON.parse(JSON.stringify(this.state.people));
+		delete people[this.state.deleteName];
+		this.savePeople(people);
+	}
+	
+	openDeleteModal(name) {
+		this.setState({showDeleteModal: true, deleteName: name});
+	}
+	
 	savePeople(people) {
 		this.setState({people: people});
 		new LocalStorageManager().savePeople(people);
@@ -78,11 +95,12 @@ class People extends React.Component {
 				<MainNavbar/>
 				<MainJumbotron title="People" message="Filler for now"/>
 				<div className="container">
-					<ContactsSection people={this.state.people} platforms={this.state.platforms} create={this.handleCreate} deleteHandler={this.handleDeleteIntegration}/>
+					<ContactsSection people={this.state.people} platforms={this.state.platforms} create={this.handleCreate} deleteHandler={this.handleDeleteIntegration} deleteContact={this.openDeleteModal}/>
 					<Button bsSize="large" onClick={() => this.setState({showContactModal: true})}>Add contact</Button>
 				</div>
 				<ContactModal showModal={this.state.showContactModal} hide={this.hideContactModal} add={this.addContact} people={this.state.people}/>
 				<CreateIntegrationModal showModal={this.state.showCreateModal} hide={this.hideCreateModal} name={this.state.createName} platform={this.state.createPlatform} create={this.handleCreateSubmit}/>
+				<DeleteContactModal showModal={this.state.showDeleteModal} hide={this.hideDeleteModal} name={this.state.deleteName} confirmDelete={this.handleDeleteContact}/>
 			</div>
 		);
 	}
@@ -168,7 +186,8 @@ class ContactsSection extends React.Component {
 			peoplejsx.push(
 				<div key={name}>
 					<Panel onClick={() => this.togglePanel(name)} className="cursor-pointer">
-						{name}
+						<Button onClick={() => this.props.deleteContact(name)} className="pull-right">Delete</Button>
+						<h4>{name}</h4>
 					</Panel>
 					<Collapse in={this.state.openPanels[name]}>
 					<div><Well>
@@ -291,6 +310,40 @@ class CreateIntegrationModal extends React.Component {
 				</Modal.Body>
 				<Modal.Footer>
 					<Button type="submit" form="create-form">Add</Button>
+					{' '}
+					<Button onClick={this.props.hide}>Cancel</Button>
+				</Modal.Footer>
+			</Modal>
+		);
+	}
+}
+
+class DeleteContactModal extends React.Component {
+	
+	constructor() {
+		super();
+		this.confirmDelete = this.confirmDelete.bind(this);
+	}
+	
+	confirmDelete() {
+		this.props.hide();
+		this.props.confirmDelete();
+	}
+	
+	render() {
+		if (this.props.name == null) {
+			return null;
+		}
+		return (
+			<Modal show={this.props.showModal} onHide={this.props.hide}>
+				<Modal.Header closeButton>
+					<Modal.Title>Delete contact</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					Are you sure you want to delete <b>{this.props.name}</b> from your contacts? This action cannot be undone.
+				</Modal.Body>
+				<Modal.Footer>
+					<Button bsStyle="danger" onClick={this.confirmDelete}>Delete</Button>
 					{' '}
 					<Button onClick={this.props.hide}>Cancel</Button>
 				</Modal.Footer>
