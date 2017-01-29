@@ -11,6 +11,7 @@ import Checkbox from 'react-bootstrap/lib/Checkbox';
 import Well from 'react-bootstrap/lib/Well';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
+import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 
 class Messaging extends React.Component {
 	render() {
@@ -32,7 +33,8 @@ class MessagingForm extends React.Component {
 		super();
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
-		this.state = {showContacts: false};
+		this.deselectAll = this.deselectAll.bind(this);
+		this.state = {showContacts: false, ignoredContacts: {}};
 		let manager = new LocalStorageManager();
 		this.people = manager.getPeople()
 	}
@@ -52,7 +54,7 @@ class MessagingForm extends React.Component {
 		for (let contact in this.people) {
 			peopleJsx.push(
 				<Col xs={3} md={2} key={contact}>
-					<Checkbox inline onChange={() => this.handleToggleContact(contact)}>
+					<Checkbox inline onChange={() => this.handleToggleContact(contact)} checked={!this.state.ignoredContacts[contact]}>
 						{contact}
 					</Checkbox>
 				</Col>
@@ -63,21 +65,45 @@ class MessagingForm extends React.Component {
 				<Row>
 				{peopleJsx}
 				</Row>
+				<ButtonToolbar>
+					<Button className="pull-right" onClick={this.deselectAll}>Deselect all</Button>
+					<Button className="pull-right" onClick={() => this.setState({ignoredContacts: {}})}>Select all</Button>
+				</ButtonToolbar>
 			</Well>
 		);
 	}
 	
 	handleToggleContact(contact) {
-		console.log(contact);
+		let ignoredContacts = JSON.parse(JSON.stringify(this.state.ignoredContacts));
+		ignoredContacts[contact] = !ignoredContacts[contact];
+		this.setState({ignoredContacts: ignoredContacts});
+	}
+	
+	deselectAll() {
+		let ignoredContacts = {};
+		for (let contact in this.people) {
+			ignoredContacts[contact] = true;
+		}
+		this.setState({ignoredContacts: ignoredContacts});
 	}
 	
 	render() {
+		let error = Object.keys(this.people).length == 0;
+		let warning = null;
+		if (error) {
+			warning = (
+				<FormGroup validationState="error">
+					<HelpBlock>You must <a href="people.html">create contacts</a> before sending messages.</HelpBlock>
+				</FormGroup>
+			);
+		}
 		let contacts = this.state.showContacts ? this.createContacts() : null;
 		return (
 			<form onSubmit={this.handleSubmit}>
+				{warning}
 				<FormGroup>
 					<ControlLabel>To</ControlLabel>
-					<FormControl componentClass="select" placeholder="select" onChange={this.handleChange}>
+					<FormControl componentClass="select" placeholder="select" onChange={this.handleChange} disabled={error}>
 						<option value="all">All contacts</option>
 						<option value="custom">Custom list of contacts</option>
 					</FormControl>
@@ -92,7 +118,7 @@ class MessagingForm extends React.Component {
 					<FormControl componentClass="textarea" rows="5" required/>
 				</FormGroup>
 				<HelpBlock>Subject will only be used in platforms that support it.</HelpBlock>
-				<Button type="submit" className="pull-right">Send</Button>
+				<Button type="submit" className="pull-right" disabled={error}>Send</Button>
 			</form>
 		);
 	}
