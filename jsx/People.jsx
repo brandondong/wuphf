@@ -32,8 +32,9 @@ class People extends React.Component {
 		this.handleCreateSubmit = this.handleCreateSubmit.bind(this);
 		this.handleDeleteIntegration = this.handleDeleteIntegration.bind(this);
 		this.handleDeleteContact = this.handleDeleteContact.bind(this);
+		this.togglePanel = this.togglePanel.bind(this);
 		let manager = new LocalStorageManager();
-		this.state = {showContactModal: false, showCreateModal: false, showDeleteModal: false, people: manager.getPeople(), platforms: [], createName: null, createPlatform: null, deleteName: null};
+		this.state = {showContactModal: false, showCreateModal: false, showDeleteModal: false, people: manager.getPeople(), platforms: [], createName: null, createPlatform: null, deleteName: null, openPanels: {}};
 		new IntegrationWebService().getPlatforms().then((platforms) => {
 			this.setState({platforms: platforms});
 		});
@@ -54,7 +55,10 @@ class People extends React.Component {
 	addContact(s) {
 		let people = JSON.parse(JSON.stringify(this.state.people));
 		people[s] = [];
-		this.savePeople(people);
+		let openPanels = JSON.parse(JSON.stringify(this.state.openPanels));
+		openPanels[s] = true;
+		this.setState({people: people, openPanels: openPanels});
+		new LocalStorageManager().savePeople(people);
 	}
 	
 	handleCreate(name, platform) {
@@ -89,13 +93,21 @@ class People extends React.Component {
 		new LocalStorageManager().savePeople(people);
 	}
 	
+	togglePanel(name) {
+		let isOpen = this.state.openPanels[name];
+		let openPanels = JSON.parse(JSON.stringify(this.state.openPanels));
+		openPanels[name] = !isOpen;
+		this.setState({openPanels: openPanels});
+	}
+	
 	render() {
 		return (
 			<div>
 				<MainNavbar/>
 				<MainJumbotron title="People" message="Filler for now"/>
 				<div className="container">
-					<ContactsSection people={this.state.people} platforms={this.state.platforms} create={this.handleCreate} deleteHandler={this.handleDeleteIntegration} deleteContact={this.openDeleteModal}/>
+					<ContactsSection people={this.state.people} platforms={this.state.platforms} create={this.handleCreate} deleteHandler={this.handleDeleteIntegration} deleteContact={this.openDeleteModal} 
+						openPanels={this.state.openPanels} togglePanel={this.togglePanel}/>
 					<Button bsSize="large" onClick={() => this.setState({showContactModal: true})}>Add contact</Button>
 				</div>
 				<ContactModal showModal={this.state.showContactModal} hide={this.hideContactModal} add={this.addContact} people={this.state.people}/>
@@ -107,18 +119,6 @@ class People extends React.Component {
 }
 
 class ContactsSection extends React.Component {
-	
-	constructor() {
-		super();
-		this.state = {openPanels: {}};
-	}
-	
-	togglePanel(name) {
-		let isOpen = this.state.openPanels[name];
-		let openPanels = JSON.parse(JSON.stringify(this.state.openPanels));
-		openPanels[name] = !isOpen;
-		this.setState({openPanels: openPanels});
-	}
 	
 	createIntegrations(name) {
 		let platforms = this.props.platforms.map((platform) => {
@@ -180,16 +180,23 @@ class ContactsSection extends React.Component {
 		throw new Error("Failed to find user id field");
 	}
 	
+	deleteContact(e, name) {
+		this.props.deleteContact(name);
+		e.stopPropagation();
+	}
+	
 	render() {
 		let peoplejsx = [];
 		for (let name in this.props.people) {
 			peoplejsx.push(
 				<div key={name}>
-					<Panel onClick={() => this.togglePanel(name)} className="cursor-pointer">
-						<Button onClick={() => this.props.deleteContact(name)} className="pull-right">Delete</Button>
-						<h4>{name}</h4>
+					<Panel onClick={() => this.props.togglePanel(name)} className="cursor-pointer">
+						{name}
+						<Button onClick={(e) => this.deleteContact(e, name)} className="close" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</Button>
 					</Panel>
-					<Collapse in={this.state.openPanels[name]}>
+					<Collapse in={this.props.openPanels[name]}>
 					<div><Well>
 						<h3>Existing integrations</h3>
 						{this.existingIntegrations(name)}
@@ -202,7 +209,7 @@ class ContactsSection extends React.Component {
 		}
 		return (
 			<div>
-				<PageHeader>Contacts added</PageHeader>
+				<PageHeader>Contacts</PageHeader>
 				{peoplejsx}
 			</div>
 		);
