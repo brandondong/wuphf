@@ -34,13 +34,24 @@ class MessagingForm extends React.Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.deselectAll = this.deselectAll.bind(this);
-		this.state = {showContacts: false, ignoredContacts: {}};
+		this.handleSubjectChange = this.handleSubjectChange.bind(this);
+		this.handleMessageChange = this.handleMessageChange.bind(this);
+		this.state = {showContacts: false, ignoredContacts: {}, subject: "", message: ""};
 		let manager = new LocalStorageManager();
-		this.people = manager.getPeople()
+		this.people = manager.getPeople();
+		this.integrations = manager.getIntegrations();
 	}
 	
 	handleSubmit(e) {
-		console.log("submit");
+		for (let contact in this.people) {
+			if (!this.state.ignoredContacts[contact]) {
+				for (let receiver of this.people[contact]) {
+					let integration = this.integrations[receiver.platformLabel];
+					console.log(integration);
+					console.log(receiver);
+				}
+			}
+		}
 		e.preventDefault();
 	}
 	
@@ -87,6 +98,14 @@ class MessagingForm extends React.Component {
 		this.setState({ignoredContacts: ignoredContacts});
 	}
 	
+	handleSubjectChange(e) {
+		this.setState({subject: e.target.value});
+	}
+	
+	handleMessageChange(e) {
+		this.setState({message: e.target.value});
+	}
+	
 	render() {
 		let error = Object.keys(this.people).length == 0;
 		let warning = null;
@@ -111,11 +130,11 @@ class MessagingForm extends React.Component {
 				</FormGroup>
 				<FormGroup>
 					<ControlLabel>Subject</ControlLabel>
-					<FormControl type="text"/>
+					<FormControl type="text" onChange={this.handleSubjectChange}/>
 				</FormGroup>
 				<FormGroup>
 					<ControlLabel>Message</ControlLabel>
-					<FormControl componentClass="textarea" rows="5" required/>
+					<FormControl componentClass="textarea" rows="5" onChange={this.handleMessageChange} required/>
 				</FormGroup>
 				<HelpBlock>Subject will only be used in platforms that support it.</HelpBlock>
 				<Button type="submit" className="pull-right" disabled={error}>Send</Button>
