@@ -2,6 +2,8 @@ const PLATFORM_URL = "rest/integration/platforms";
 
 const CREATE_URL = "rest/integration/create";
 
+const MESSAGE_URL = "rest/integration/message";
+
 export default class IntegrationWebService {
 	
 	getPlatforms() {
@@ -18,6 +20,15 @@ export default class IntegrationWebService {
 			xmlhttp.open("POST", CREATE_URL, true);
 			xmlhttp.setRequestHeader("Content-type", "application/json");
 			xmlhttp.send(JSON.stringify({platformLabel: platformLabel, properties: properties}));
+		});
+	}
+	
+	sendMessage(integration, receiver, subject, message) {
+		return new Promise((resolve, reject) => {
+			let xmlhttp = this.createRequest(resolve, reject);
+			xmlhttp.open("POST", MESSAGE_URL, true);
+			xmlhttp.setRequestHeader("Content-type", "application/json");
+			xmlhttp.send(JSON.stringify({integration: integration, receiver: receiver, subject: subject, message: message}));
 		});
 	}
 	

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import MainNavbar, {MainJumbotron} from './MainNavbar.jsx';
 import LocalStorageManager from './LocalStorageManager.js';
+import IntegrationWebService from './IntegrationWebService.js';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
@@ -36,23 +37,45 @@ class MessagingForm extends React.Component {
 		this.deselectAll = this.deselectAll.bind(this);
 		this.handleSubjectChange = this.handleSubjectChange.bind(this);
 		this.handleMessageChange = this.handleMessageChange.bind(this);
-		this.state = {showContacts: false, ignoredContacts: {}, subject: "", message: ""};
+		this.state = {showContacts: false, ignoredContacts: {}, subject: "", message: "", buttonLoading: false};
 		let manager = new LocalStorageManager();
 		this.people = manager.getPeople();
 		this.integrations = manager.getIntegrations();
 	}
 	
 	handleSubmit(e) {
+		this.setState({buttonLoading: true});
+		let promises = [];
 		for (let contact in this.people) {
 			if (!this.state.ignoredContacts[contact]) {
 				for (let receiver of this.people[contact]) {
-					let integration = this.integrations[receiver.platformLabel];
-					console.log(integration);
-					console.log(receiver);
+					promises.push(this.sendMessage(receiver));
 				}
 			}
 		}
+		Promise.all(promises).then(() => {
+			this.setState({buttonLoading: false});
+		}).catch(() => {
+			this.setState({buttonLoading: false});
+		});
 		e.preventDefault();
+	}
+	
+	sendMessage(receiver) {
+		let integration = this.integrations[receiver.platformLabel];
+		let promise;
+		if (integration == null) {
+			promise = Promise.reject("No integration configured for " + receiver.platformLabel);
+		} else {
+			let webService = new IntegrationWebService();
+			promise = webService.sendMessage(integration, receiver, this.state.subject, this.state.message);
+		}
+		return promise.then((integration) => {
+			console.log(integration);
+			console.log("message sent");
+		}).catch((e) => {
+			console.log(e);
+		});
 	}
 	
 	handleChange(e) {
@@ -107,6 +130,7 @@ class MessagingForm extends React.Component {
 	}
 	
 	render() {
+		let buttonText = this.state.buttonLoading ? "Loading..." : "Send";
 		let error = Object.keys(this.people).length == 0;
 		let warning = null;
 		if (error) {
@@ -137,7 +161,7 @@ class MessagingForm extends React.Component {
 					<FormControl componentClass="textarea" rows="5" onChange={this.handleMessageChange} required/>
 				</FormGroup>
 				<HelpBlock>Subject will only be used in platforms that support it.</HelpBlock>
-				<Button type="submit" className="pull-right" disabled={error}>Send</Button>
+				<Button type="submit" className="pull-right" disabled={error || this.state.buttonLoading}>{buttonText}</Button>
 			</form>
 		);
 	}
