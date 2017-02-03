@@ -13,6 +13,7 @@ import Well from 'react-bootstrap/lib/Well';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
+import Alert from 'react-bootstrap/lib/Alert';
 
 class Messaging extends React.Component {
 	render() {
@@ -37,7 +38,7 @@ class MessagingForm extends React.Component {
 		this.deselectAll = this.deselectAll.bind(this);
 		this.handleSubjectChange = this.handleSubjectChange.bind(this);
 		this.handleMessageChange = this.handleMessageChange.bind(this);
-		this.state = {showContacts: false, ignoredContacts: {}, subject: "", message: "", buttonLoading: false};
+		this.state = {showContacts: false, ignoredContacts: {}, subject: "", message: "", buttonLoading: false, alerts: []};
 		let manager = new LocalStorageManager();
 		this.people = manager.getPeople();
 		this.integrations = manager.getIntegrations();
@@ -65,17 +66,30 @@ class MessagingForm extends React.Component {
 		let integration = this.integrations[receiver.platformLabel];
 		let promise;
 		if (integration == null) {
-			promise = Promise.reject("No integration configured for " + receiver.platformLabel);
+			promise = Promise.reject("No integration configured for " + receiver.platformLabel + ".");
 		} else {
 			let webService = new IntegrationWebService();
 			promise = webService.sendMessage(integration, receiver, this.state.subject, this.state.message);
 		}
 		return promise.then((integration) => {
-			console.log(integration);
-			console.log("message sent");
+			new LocalStorageManager().saveIntegration(integration);
+			let alerts = this.state.alerts.slice();
+			alerts.unshift({error: false, identityLabel: "Filler for now"});
+			this.setState({alerts: alerts});
 		}).catch((e) => {
-			console.log(e);
+			let alerts = this.state.alerts.slice();
+			alerts.unshift({error: true, errorMessage: e, identityLabel: "Filler for now"});
+			this.setState({alerts: alerts});
 		});
+	}
+	
+	getReceiverIdField(platform) {
+		for (let field of platform.receiverFields) {
+			if (field.idField) {
+				return field.label;
+			}
+		}
+		throw new Error("Failed to find receiver id field");
 	}
 	
 	handleChange(e) {
@@ -141,28 +155,58 @@ class MessagingForm extends React.Component {
 			);
 		}
 		let contacts = this.state.showContacts ? this.createContacts() : null;
+		let alerts = this.state.alerts.map((a, i) => {
+			return (
+				<MessagingResult key={i} error={a.error} identityLabel={a.identityLabel} errorMessage={a.errorMessage}/>
+			);
+		});
 		return (
-			<form onSubmit={this.handleSubmit}>
-				{warning}
-				<FormGroup>
-					<ControlLabel>To</ControlLabel>
-					<FormControl componentClass="select" placeholder="select" onChange={this.handleChange} disabled={error}>
-						<option value="all">All contacts</option>
-						<option value="custom">Custom list of contacts</option>
-					</FormControl>
-					{contacts}
-				</FormGroup>
-				<FormGroup>
-					<ControlLabel>Subject</ControlLabel>
-					<FormControl type="text" onChange={this.handleSubjectChange}/>
-				</FormGroup>
-				<FormGroup>
-					<ControlLabel>Message</ControlLabel>
-					<FormControl componentClass="textarea" rows="5" onChange={this.handleMessageChange} required/>
-				</FormGroup>
-				<HelpBlock>Subject will only be used in platforms that support it.</HelpBlock>
-				<Button type="submit" className="pull-right" disabled={error || this.state.buttonLoading}>{buttonText}</Button>
-			</form>
+			<div>
+				<form onSubmit={this.handleSubmit}>
+					{warning}
+					<FormGroup>
+						<ControlLabel>To</ControlLabel>
+						<FormControl componentClass="select" placeholder="select" onChange={this.handleChange} disabled={error}>
+							<option value="all">All contacts</option>
+							<option value="custom">Custom list of contacts</option>
+						</FormControl>
+						{contacts}
+					</FormGroup>
+					<FormGroup>
+						<ControlLabel>Subject</ControlLabel>
+						<FormControl type="text" onChange={this.handleSubjectChange}/>
+					</FormGroup>
+					<FormGroup>
+						<ControlLabel>Message</ControlLabel>
+						<FormControl componentClass="textarea" rows="5" onChange={this.handleMessageChange} required/>
+					</FormGroup>
+					<HelpBlock>Subject will only be used in platforms that support it.</HelpBlock>
+					<div className="clearfix">
+						<Button type="submit" className="pull-right" disabled={error || this.state.buttonLoading}>{buttonText}</Button>
+					</div>
+				</form>
+				<hr/>
+				{alerts}
+			</div>
+		);
+	}
+}
+
+class MessagingResult extends React.Component {
+	render() {
+		let style;
+		let message;
+		if (this.props.error) {
+			style = "danger";
+			message = <p>Error while sending message to <b>{this.props.identityLabel}</b>. {this.props.errorMessage}</p>
+		} else {
+			style = "success";
+			message = <p>Message successfully sent to <b>{this.props.identityLabel}</b>.</p>
+		}
+		return (
+			<Alert bsStyle={style} onDismiss={console.log}>
+				{message}
+			</Alert>
 		);
 	}
 }
