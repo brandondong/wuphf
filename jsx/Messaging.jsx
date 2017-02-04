@@ -50,7 +50,7 @@ class MessagingForm extends React.Component {
 		for (let contact in this.people) {
 			if (!this.state.ignoredContacts[contact]) {
 				for (let receiver of this.people[contact]) {
-					promises.push(this.sendMessage(receiver));
+					promises.push(this.sendMessage(receiver, contact));
 				}
 			}
 		}
@@ -62,7 +62,7 @@ class MessagingForm extends React.Component {
 		e.preventDefault();
 	}
 	
-	sendMessage(receiver) {
+	sendMessage(receiver, contact) {
 		let integration = this.integrations[receiver.platformLabel];
 		let promise;
 		if (integration == null) {
@@ -74,22 +74,13 @@ class MessagingForm extends React.Component {
 		return promise.then((integration) => {
 			new LocalStorageManager().saveIntegration(integration);
 			let alerts = this.state.alerts.slice();
-			alerts.unshift({error: false, identityLabel: "Filler for now"});
+			alerts.unshift({error: false, identityLabel: receiver.idField, contact: contact});
 			this.setState({alerts: alerts});
 		}).catch((e) => {
 			let alerts = this.state.alerts.slice();
-			alerts.unshift({error: true, errorMessage: e, identityLabel: "Filler for now"});
+			alerts.unshift({error: true, errorMessage: e, identityLabel: receiver.idField, contact: contact});
 			this.setState({alerts: alerts});
 		});
-	}
-	
-	getReceiverIdField(platform) {
-		for (let field of platform.receiverFields) {
-			if (field.idField) {
-				return field.label;
-			}
-		}
-		throw new Error("Failed to find receiver id field");
 	}
 	
 	handleChange(e) {
@@ -157,7 +148,7 @@ class MessagingForm extends React.Component {
 		let contacts = this.state.showContacts ? this.createContacts() : null;
 		let alerts = this.state.alerts.map((a, i) => {
 			return (
-				<MessagingResult key={i} error={a.error} identityLabel={a.identityLabel} errorMessage={a.errorMessage}/>
+				<MessagingResult key={i} result={a}/>
 			);
 		});
 		return (
@@ -196,12 +187,13 @@ class MessagingResult extends React.Component {
 	render() {
 		let style;
 		let message;
-		if (this.props.error) {
+		let name = <span><b>{this.props.result.identityLabel}</b> ({this.props.result.contact})</span>;
+		if (this.props.result.error) {
 			style = "danger";
-			message = <p>Error while sending message to <b>{this.props.identityLabel}</b>. {this.props.errorMessage}</p>
+			message = <div>Error while sending message to {name}. {this.props.result.errorMessage}</div>;
 		} else {
 			style = "success";
-			message = <p>Message successfully sent to <b>{this.props.identityLabel}</b>.</p>
+			message = <div>Message successfully sent to {name}.</div>;
 		}
 		return (
 			<Alert bsStyle={style} onDismiss={console.log}>

@@ -48,7 +48,6 @@ class ExistingIntegrationsSection extends React.Component {
 	
 	createIntegrationDisplay(platform, integration) {
 		let imagePath = "images/" + platform.logo;
-		let integrationLabel = integration.valueMap[this.getIdField(platform)];
 		let popover = (
 			<Popover id="popover-trigger-click-root-close" title="Options">
 				<Button href={platform.redirectUrl} onClick={() => this.saveCurrentPlatform(platform)}>Edit</Button>
@@ -61,18 +60,9 @@ class ExistingIntegrationsSection extends React.Component {
 				<OverlayTrigger trigger="click" rootClose placement="top" overlay={popover}>
 					<Image src={imagePath} width={57} height={57} className="cursor-pointer" thumbnail/>
 				</OverlayTrigger>
-				<p>{integrationLabel}</p>
+				<p>{integration.idField}</p>
 			</Col>
 		);
-	}
-	
-	getIdField(platform) {
-		for (let field of platform.userFields) {
-			if (field.idField) {
-				return field.label;
-			}
-		}
-		throw new Error("Failed to find user id field");
 	}
 	
 	saveCurrentPlatform(platform) {

@@ -12,6 +12,8 @@ public class IntegrationWebModel {
 
 	private Map<String, String> valueMap;
 
+	private String idField;
+
 	/**
 	 * Public constructor for JAXB, use {
 	 * {@link #createFrom(FieldValueMap, Platform)} to instantiate instead
@@ -19,15 +21,16 @@ public class IntegrationWebModel {
 	public IntegrationWebModel() {
 	}
 
-	private IntegrationWebModel(String platformLabel, Map<String, String> valueMap) {
+	private IntegrationWebModel(String platformLabel, Map<String, String> valueMap, String idField) {
 		this.platformLabel = platformLabel;
 		this.valueMap = valueMap;
+		this.idField = idField;
 	}
 
 	public static IntegrationWebModel createFrom(FieldValueMap integration, Platform platform) {
 		Map<String, String> valueMap = new HashMap<>();
 		platform.getUserFields().stream().forEach((f) -> valueMap.put(f.getLabel(), integration.getValueForField(f)));
-		return new IntegrationWebModel(platform.getLabel(), valueMap);
+		return new IntegrationWebModel(platform.getLabel(), valueMap, integration.getIdValue());
 	}
 
 	public String getPlatformLabel() {
@@ -44,6 +47,14 @@ public class IntegrationWebModel {
 
 	public void setValueMap(Map<String, String> valueMap) {
 		this.valueMap = valueMap;
+	}
+
+	public String getIdField() {
+		return idField;
+	}
+
+	public void setIdField(String idField) {
+		this.idField = idField;
 	}
 
 }
