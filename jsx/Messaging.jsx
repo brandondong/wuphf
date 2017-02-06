@@ -134,6 +134,12 @@ class MessagingForm extends React.Component {
 		this.setState({message: e.target.value});
 	}
 	
+	handleDismissAlert(i) {
+		let alerts = this.state.alerts.slice();
+		alerts.splice(i, 1);
+		this.setState({alerts});
+	}
+	
 	render() {
 		let buttonText = this.state.buttonLoading ? "Loading..." : "Send";
 		let error = Object.keys(this.people).length == 0;
@@ -148,7 +154,7 @@ class MessagingForm extends React.Component {
 		let contacts = this.state.showContacts ? this.createContacts() : null;
 		let alerts = this.state.alerts.map((a, i) => {
 			return (
-				<MessagingResult key={i} result={a}/>
+				<MessagingResult key={i} result={a} handleDismiss={() => this.handleDismissAlert(i)}/>
 			);
 		});
 		return (
@@ -177,7 +183,9 @@ class MessagingForm extends React.Component {
 					</div>
 				</form>
 				<hr/>
-				{alerts}
+				<div className="pre-scrollable">
+					{alerts}
+				</div>
 			</div>
 		);
 	}
@@ -196,7 +204,7 @@ class MessagingResult extends React.Component {
 			message = <div>Message successfully sent to {name}.</div>;
 		}
 		return (
-			<Alert bsStyle={style} onDismiss={console.log}>
+			<Alert bsStyle={style} onDismiss={this.props.handleDismiss}>
 				{message}
 			</Alert>
 		);
