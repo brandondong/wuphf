@@ -50,7 +50,7 @@ class ExistingIntegrationsSection extends React.Component {
 		let imagePath = "images/" + platform.logo;
 		let popover = (
 			<Popover id="popover-trigger-click-root-close" title="Options">
-				<Button href={platform.redirectUrl} onClick={() => this.saveCurrentPlatform(platform)}>Edit</Button>
+				<Button href={platform.redirectUrl}>Edit</Button>
 				{' '}
 				<Button bsStyle="danger" onClick={() => this.props.deleteHandler(integration)}>Delete</Button>
 			</Popover>
@@ -63,10 +63,6 @@ class ExistingIntegrationsSection extends React.Component {
 				<p>{integration.idField}</p>
 			</Col>
 		);
-	}
-	
-	saveCurrentPlatform(platform) {
-		new LocalStorageManager().saveCurrentPlatform(platform.label);
 	}
 	
 	render() {
@@ -99,14 +95,10 @@ class NewIntegrationSection extends React.Component {
 	
 	wrapInPlatformLink(platform, jsx) {
 		return (
-			<a href={platform.redirectUrl} onClick={() => this.saveCurrentPlatform(platform)}>
+			<a href={platform.redirectUrl}>
 				{jsx}
 			</a>
 		);
-	}
-		
-	saveCurrentPlatform(platform) {
-		new LocalStorageManager().saveCurrentPlatform(platform.label);
 	}
 	
 	render() {

@@ -2,8 +2,6 @@ const INTEGRATIONS_KEY = "integrations.key";
 
 const PEOPLE_KEY = "people.key";
 
-const CURRENT_PLATFORM_KEY = "current.platform.key";
-
 export default class LocalStorageManager {
 	
 	getIntegrations() {
@@ -34,13 +32,5 @@ export default class LocalStorageManager {
 	
 	savePeople(people) {
 		localStorage.setItem(PEOPLE_KEY, JSON.stringify(people));
-	}
-	
-	saveCurrentPlatform(platformLabel) {
-		localStorage.setItem(CURRENT_PLATFORM_KEY, platformLabel);
-	}
-	
-	getCurrentPlatform() {
-		return localStorage.getItem(CURRENT_PLATFORM_KEY);
 	}
 }

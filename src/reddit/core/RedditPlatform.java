@@ -55,7 +55,7 @@ public class RedditPlatform implements Platform {
 	@Override
 	public String getLoginRedirectUrl() {
 		return String.format(
-				"https://www.reddit.com/api/v1/authorize?client_id=%s&response_type=code&state=wuphf&redirect_uri=%s&duration=permanent&scope=identity privatemessages",
+				"https://www.reddit.com/api/v1/authorize?client_id=%s&response_type=code&state=reddit&redirect_uri=%s&duration=permanent&scope=identity privatemessages",
 				APP_DETAILS.getClientId(), Platform.APP_REDIRECT);
 	}
 

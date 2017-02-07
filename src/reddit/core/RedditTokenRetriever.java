@@ -44,6 +44,11 @@ public class RedditTokenRetriever {
 			try {
 				byte[] out = transformPostData(getPostParameters(code));
 				JSONObject json = sendPostRequest(out);
+				if (json.has("error")) {
+					throw new IllegalStateException(
+							String.format("Failed to grant permissions: %s.", json.getString("error")));
+				}
+
 				String access = json.getString("access_token");
 				String refresh = json.getString("refresh_token");
 				long expiresIn = json.getLong("expires_in");
