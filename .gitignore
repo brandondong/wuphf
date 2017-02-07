@@ -3,3 +3,4 @@
 /node_modules/
 /WebContent/js/
 /src/reddit/core/RedditAppDetails.java
+/src/slack/core/SlackAppDetails.java

@@ -22,6 +22,7 @@ import java.util.concurrent.CompletableFuture;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import core.model.OAuthAppDetails;
 import core.model.Platform;
 
 public class RedditTokenRetriever {
@@ -114,7 +115,7 @@ public class RedditTokenRetriever {
 	}
 
 	private String getAuthorizationHeader() {
-		IRedditAppDetails details = IRedditAppDetails.getDefault();
+		OAuthAppDetails details = RedditPlatform.APP_DETAILS;
 		String encoding = Base64.getEncoder()
 				.encodeToString(String.format("%s:%s", details.getClientId(), details.getClientSecret()).getBytes());
 		return String.format("Basic %s", encoding);

@@ -4,11 +4,14 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import core.model.Integration;
+import core.model.OAuthAppDetails;
 import core.model.Platform;
 import core.schema.FieldValueMap;
 import core.schema.Fields;
 
 public class RedditPlatform implements Platform {
+
+	public static final OAuthAppDetails APP_DETAILS = new RedditAppDetails();
 
 	@Override
 	public String getLabel() {
@@ -53,7 +56,7 @@ public class RedditPlatform implements Platform {
 	public String getLoginRedirectUrl() {
 		return String.format(
 				"https://www.reddit.com/api/v1/authorize?client_id=%s&response_type=code&state=wuphf&redirect_uri=%s&duration=permanent&scope=identity privatemessages",
-				IRedditAppDetails.getDefault().getClientId(), Platform.APP_REDIRECT);
+				APP_DETAILS.getClientId(), Platform.APP_REDIRECT);
 	}
 
 }
