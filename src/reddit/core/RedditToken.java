@@ -16,17 +16,17 @@ class RedditToken {
 		expiresAt = LocalDateTime.now().plusSeconds(epochSeconds);
 	}
 
-	private RedditToken(String accessToken, String refreshToken, String expiresAt) {
+	private RedditToken(String accessToken, String refreshToken, LocalDateTime expiresAt) {
 		this.accessToken = accessToken;
 		this.refreshToken = refreshToken;
-		this.expiresAt = LocalDateTime.parse(expiresAt);
+		this.expiresAt = expiresAt;
 	}
 
 	public static RedditToken expiresIn(String accessToken, String refreshToken, long epochSeconds) {
 		return new RedditToken(accessToken, refreshToken, epochSeconds);
 	}
 
-	public static RedditToken expiresAt(String accessToken, String refreshToken, String expiresAt) {
+	public static RedditToken expiresAt(String accessToken, String refreshToken, LocalDateTime expiresAt) {
 		return new RedditToken(accessToken, refreshToken, expiresAt);
 	}
 

@@ -1,5 +1,6 @@
 package reddit.core;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -16,7 +17,7 @@ class RedditIntegration implements Integration {
 		username = valueMap.getValueForField(RedditFields.USERNAME);
 		accessToken = RedditToken.expiresAt(valueMap.getValueForField(RedditFields.ACCESS_TOKEN),
 				valueMap.getValueForField(RedditFields.REFRESH_TOKEN),
-				valueMap.getValueForField(RedditFields.EXPIRES_AT));
+				LocalDateTime.parse(valueMap.getValueForField(RedditFields.EXPIRES_AT)));
 	}
 
 	@Override

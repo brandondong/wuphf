@@ -1,12 +1,10 @@
 package web.model;
 
-import java.util.Map;
-
 public class RedirectProperties {
 
 	private String platformLabel;
 
-	private Map<String, String> properties;
+	private String code;
 
 	public String getPlatformLabel() {
 		return platformLabel;
@@ -16,12 +14,12 @@ public class RedirectProperties {
 		this.platformLabel = platformLabel;
 	}
 
-	public Map<String, String> getProperties() {
-		return properties;
+	public String getCode() {
+		return code;
 	}
 
-	public void setProperties(Map<String, String> properties) {
-		this.properties = properties;
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 }

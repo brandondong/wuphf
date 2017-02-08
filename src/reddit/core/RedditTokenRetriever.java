@@ -27,20 +27,10 @@ import core.model.Platform;
 
 public class RedditTokenRetriever {
 
-	private static final String CODE = "code";
-
-	private static final String ERROR = "error";
-
 	private static final String TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
 
-	public CompletableFuture<RedditToken> getToken(Map<String, String> parameters) {
+	public CompletableFuture<RedditToken> getToken(String code) {
 		return CompletableFuture.supplyAsync(() -> {
-			if (parameters.containsKey(ERROR)) {
-				throw new IllegalStateException(
-						String.format("Failed to grant permissions: %s.", parameters.get(ERROR)));
-			}
-			String code = parameters.get(CODE);
-
 			try {
 				byte[] out = transformPostData(getPostParameters(code));
 				JSONObject json = sendPostRequest(out);
@@ -107,7 +97,7 @@ public class RedditTokenRetriever {
 	private Map<String, String> getPostParameters(String code) {
 		Map<String, String> params = new HashMap<>();
 		params.put("grant_type", "authorization_code");
-		params.put(CODE, code);
+		params.put("code", code);
 		params.put("redirect_uri", Platform.APP_REDIRECT);
 		return params;
 	}

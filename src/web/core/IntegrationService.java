@@ -50,7 +50,7 @@ public class IntegrationService {
 
 	public CompletableFuture<IntegrationWebModel> createIntegrationFromRedirect(RedirectProperties properties) {
 		Platform platform = manager.getPlatformByLabel(properties.getPlatformLabel());
-		return platform.createIntegrationFromRedirect(properties.getProperties())
+		return platform.createIntegrationFromRedirect(properties.getCode())
 				.thenApply((fvm) -> IntegrationWebModel.createFrom(fvm, platform));
 	}
 

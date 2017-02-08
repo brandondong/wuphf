@@ -1,6 +1,5 @@
 package test.core;
 
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import core.model.Integration;
@@ -52,11 +51,9 @@ public class MockPlatform implements Platform {
 	}
 
 	@Override
-	public CompletableFuture<FieldValueMap> createIntegrationFromRedirect(Map<String, String> properties) {
-		FieldValueMap.Builder map = FieldValueMap.builder(getUserFields());
-		for (String prop : properties.keySet()) {
-			map.setField(prop, properties.get(prop));
-		}
+	public CompletableFuture<FieldValueMap> createIntegrationFromRedirect(String code) {
+		FieldValueMap.Builder map = FieldValueMap.builder(getUserFields()).setField(ID_FIELD, code)
+				.setField(USERNAME_FIELD, "user").setField(PASSWORD_FIELD, "pass");
 		return CompletableFuture.completedFuture(map.create());
 	}
 

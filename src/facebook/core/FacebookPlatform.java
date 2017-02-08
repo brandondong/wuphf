@@ -1,6 +1,5 @@
 package facebook.core;
 
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import core.model.Integration;
@@ -31,7 +30,7 @@ public class FacebookPlatform implements Platform {
 	}
 
 	@Override
-	public CompletableFuture<FieldValueMap> createIntegrationFromRedirect(Map<String, String> properties) {
+	public CompletableFuture<FieldValueMap> createIntegrationFromRedirect(String code) {
 		// TODO Auto-generated method stub
 		return null;
 	}

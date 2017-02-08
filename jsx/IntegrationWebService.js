@@ -14,12 +14,12 @@ export default class IntegrationWebService {
 		});
 	}
 	
-	createIntegration(platformLabel, properties) {
+	createIntegration(platformLabel, code) {
 		return new Promise((resolve, reject) => {
 			let xmlhttp = this.createRequest(resolve, reject);
 			xmlhttp.open("POST", CREATE_URL, true);
 			xmlhttp.setRequestHeader("Content-type", "application/json");
-			xmlhttp.send(JSON.stringify({platformLabel: platformLabel, properties: properties}));
+			xmlhttp.send(JSON.stringify({platformLabel: platformLabel, code: code}));
 		});
 	}
 	

@@ -1,6 +1,5 @@
 package reddit.core;
 
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import core.model.Integration;
@@ -34,8 +33,8 @@ public class RedditPlatform implements Platform {
 	}
 
 	@Override
-	public CompletableFuture<FieldValueMap> createIntegrationFromRedirect(Map<String, String> properties) {
-		return new RedditTokenRetriever().getToken(properties).thenCompose(this::createMapWithToken);
+	public CompletableFuture<FieldValueMap> createIntegrationFromRedirect(String code) {
+		return new RedditTokenRetriever().getToken(code).thenCompose(this::createMapWithToken);
 	}
 
 	private CompletableFuture<FieldValueMap> createMapWithToken(RedditToken token) {

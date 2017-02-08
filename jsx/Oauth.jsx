@@ -18,13 +18,17 @@ class OAuth extends React.Component {
 			map[param.substring(0, index)] = param.substring(index + 1);
 		}
 		let platformLabel = map.state;
-		new IntegrationWebService().createIntegration(platformLabel, map).then((i) => {
-			this.setState({progress: "Integration created successfully."});
-			let manager = new LocalStorageManager();
-			manager.saveIntegration(i);
-		}).catch((e) => {
-			this.setState({progress: "An unexpected error occurred.", error: e});
-		});
+		if (map.error) {
+			this.state = {progress: "Failed to grant permissions.", error: map.error};
+		} else {
+			new IntegrationWebService().createIntegration(platformLabel, map.code).then((i) => {
+				this.setState({progress: "Integration created successfully."});
+				let manager = new LocalStorageManager();
+				manager.saveIntegration(i);
+			}).catch((e) => {
+				this.setState({progress: "An unexpected error occurred.", error: e});
+			});
+		}
 	}
 	
 	render() {
