@@ -10,7 +10,7 @@ import core.schema.Fields;
 
 public class SlackPlatform implements Platform {
 
-	private static final OAuthAppDetails APP_DETAILS = new SlackAppDetails();
+	public static final OAuthAppDetails APP_DETAILS = new SlackAppDetails();
 
 	@Override
 	public String getLabel() {
@@ -35,8 +35,14 @@ public class SlackPlatform implements Platform {
 
 	@Override
 	public CompletableFuture<FieldValueMap> createIntegrationFromRedirect(String code) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SlackTokenRetriever().getAccessToken(code).thenCompose(this::retrieveIdentityInfo);
+	}
+
+	private CompletableFuture<FieldValueMap> retrieveIdentityInfo(String accessToken) {
+		FieldValueMap.Builder valueMap = FieldValueMap.builder(getUserFields()).setField(SlackFields.ACCESS_TOKEN,
+				accessToken);
+		return new SlackOAuthService(accessToken).getTeamName()
+				.thenApply((name) -> valueMap.setField(SlackFields.TEAM_NAME, name).create());
 	}
 
 	@Override
@@ -46,7 +52,8 @@ public class SlackPlatform implements Platform {
 
 	@Override
 	public String getLoginRedirectUrl() {
-		return String.format("https://slack.com/oauth/authorize?client_id=%s&state=slack&scope=identity.basic",
+		return String.format(
+				"https://slack.com/oauth/authorize?client_id=%s&state=slack&scope=team:read,chat:write:user,im:read",
 				APP_DETAILS.getClientId());
 	}
 

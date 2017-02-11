@@ -9,11 +9,13 @@ class SlackFields {
 
 	public static final Field NAME = Field.builder("Name").id().create();
 
+	public static final Field TEAM_NAME = Field.builder("Team name").id().create();
+
 	private SlackFields() {
 	}
 
 	public static Fields getUserFields() {
-		return Fields.create(NAME, ACCESS_TOKEN);
+		return Fields.create(TEAM_NAME, ACCESS_TOKEN);
 	}
 
 	public static Fields getReceiverFields() {
