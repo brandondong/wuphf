@@ -25,7 +25,7 @@ import org.json.JSONObject;
 import core.model.OAuthAppDetails;
 import core.model.Platform;
 
-public class RedditTokenRetriever {
+class RedditTokenRetriever {
 
 	private static final String TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
 

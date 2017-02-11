@@ -20,7 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RedditOAuthService {
+class RedditOAuthService {
 
 	private static final String IDENTITY_INFO = "https://oauth.reddit.com/api/v1/me";
 

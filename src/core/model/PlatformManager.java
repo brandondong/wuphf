@@ -11,13 +11,15 @@ import com.google.common.collect.ImmutableList;
 
 import facebook.core.FacebookPlatform;
 import reddit.core.RedditPlatform;
+import slack.core.SlackPlatform;
 
 /**
  * A singleton for managing available platforms
  */
 public class PlatformManager implements IPlatformManager {
 
-	private static final List<Platform> PLATFORMS = ImmutableList.of(new FacebookPlatform(), new RedditPlatform());
+	private static final List<Platform> PLATFORMS = ImmutableList.of(new FacebookPlatform(), new RedditPlatform(),
+			new SlackPlatform());
 
 	private static final IPlatformManager instance = new PlatformManager();
 
