@@ -42,10 +42,7 @@ class SlackTokenRetriever {
 
 	private String parseResponse(String content) throws JSONException {
 		JSONObject jsonResponse = new JSONObject(content);
-		if (!jsonResponse.getBoolean("ok")) {
-			throw new IllegalStateException(
-					String.format("Failed to retrieve access token: %s.", jsonResponse.getString("error")));
-		}
+		new SlackResponseVerifier().checkNoErrors(jsonResponse);
 		return jsonResponse.getString("access_token");
 	}
 
