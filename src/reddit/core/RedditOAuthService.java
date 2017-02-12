@@ -1,24 +1,20 @@
 package reddit.core;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.AbstractHttpMessage;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import web.service.HttpService;
 
 class RedditOAuthService {
 
@@ -33,52 +29,41 @@ class RedditOAuthService {
 	}
 
 	public CompletableFuture<String> getUsername() {
-		return CompletableFuture.supplyAsync(() -> {
-			HttpClient httpClient = HttpClients.createDefault();
-			HttpGet httpGet = new HttpGet(IDENTITY_INFO);
-			initHeaders(httpGet);
-
+		HttpGet httpGet = new HttpGet(IDENTITY_INFO);
+		initHeaders(httpGet);
+		return new HttpService().getResponse(httpGet).thenApply((content) -> {
 			try {
-				HttpResponse response = httpClient.execute(httpGet);
-				HttpEntity entity = response.getEntity();
-
-				if (entity != null) {
-					String content = EntityUtils.toString(entity);
-					return new JSONObject(content).getString("name");
-				}
-			} catch (IOException | JSONException e) {
+				return new JSONObject(content).getString("name");
+			} catch (JSONException e) {
 				throw new IllegalStateException(e);
 			}
-			throw new IllegalStateException("Failed to retrieve identity information.");
 		});
 	}
 
 	public CompletableFuture<Void> sendMessage(String username, String subject, String message) {
-		return CompletableFuture.supplyAsync(() -> {
-			HttpClient httpClient = HttpClients.createDefault();
-			HttpPost httpPost = new HttpPost(PRIVATE_MESSAGE);
-			initHeaders(httpPost);
-			httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-
-			try {
-				addMessageParams(username, subject, message, httpPost);
-
-				HttpResponse response = httpClient.execute(httpPost);
-				HttpEntity entity = response.getEntity();
-
-				if (entity != null) {
-					String content = EntityUtils.toString(entity);
-					JSONArray errors = new JSONObject(content).getJSONObject("json").getJSONArray("errors");
-					if (errors.length() == 0) {
-						return null;
-					}
-					throw new IllegalStateException(String.format("The following errors occurred: %s.", errors));
-				}
-			} catch (IOException | JSONException e) {
-				throw new IllegalStateException(e);
-			}
-			throw new IllegalStateException("Failed to send message.");
+		HttpPost httpPost = new HttpPost(PRIVATE_MESSAGE);
+		initHeaders(httpPost);
+		httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+		try {
+			addMessageParams(username, subject, message, httpPost);
+		} catch (UnsupportedEncodingException e) {
+			throw new IllegalStateException(e);
+		}
+		return new HttpService().getResponse(httpPost).thenApply((content) -> {
+			checkForErrors(content);
+			return null;
 		});
+	}
+
+	private void checkForErrors(String content) {
+		try {
+			JSONArray errors = new JSONObject(content).getJSONObject("json").getJSONArray("errors");
+			if (errors.length() != 0) {
+				throw new IllegalStateException(String.format("The following errors occurred: %s.", errors));
+			}
+		} catch (JSONException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
 	private void initHeaders(AbstractHttpMessage http) {
