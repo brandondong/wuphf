@@ -29,8 +29,7 @@ public class SlackPlatform implements Platform {
 
 	@Override
 	public Integration createIntegration(FieldValueMap fieldValueMap) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SlackIntegration(fieldValueMap.getValueForField(SlackFields.ACCESS_TOKEN));
 	}
 
 	@Override
@@ -53,7 +52,7 @@ public class SlackPlatform implements Platform {
 	@Override
 	public String getLoginRedirectUrl() {
 		return String.format(
-				"https://slack.com/oauth/authorize?client_id=%s&state=slack&scope=team:read,chat:write:user,im:read",
+				"https://slack.com/oauth/authorize?client_id=%s&state=slack&scope=team:read,chat:write:user,im:read,users:read",
 				APP_DETAILS.getClientId());
 	}
 
