@@ -37,16 +37,15 @@ class SlackOAuthService {
 		return new HttpService().getResponse(httpGet).thenApply((content) -> parseChannelIdOfIMUser(content, userId));
 	}
 
-	public CompletableFuture<Void> sendMessage(String userId, String text) {
+	public CompletableFuture<Void> sendMessage(String channelId, String text) {
 		try {
 			String sendUrl = String.format(
 					"https://slack.com/api/chat.postMessage?token=%s&channel=%s&text=%s&as_user=true", accessToken,
-					userId, URLEncoder.encode(text, "UTF-8"));
+					channelId, URLEncoder.encode(text, "UTF-8"));
 			HttpGet httpGet = new HttpGet(sendUrl);
 			return new HttpService().getResponse(httpGet).thenApply((content) -> {
 				try {
-					JSONObject response = new JSONObject(content);
-					new SlackResponseVerifier().checkNoErrors(response);
+					new SlackResponseVerifier().parseResponse(content);
 					return null;
 				} catch (JSONException e) {
 					throw new IllegalStateException(e);
@@ -59,8 +58,7 @@ class SlackOAuthService {
 
 	private String parseTeamResponse(String content) {
 		try {
-			JSONObject response = new JSONObject(content);
-			new SlackResponseVerifier().checkNoErrors(response);
+			JSONObject response = new SlackResponseVerifier().parseResponse(content);
 			return response.getJSONObject("team").getString("name");
 		} catch (JSONException e) {
 			throw new IllegalStateException(e);
@@ -69,8 +67,7 @@ class SlackOAuthService {
 
 	private String parseIdOfUser(String content, String user) {
 		try {
-			JSONObject response = new JSONObject(content);
-			new SlackResponseVerifier().checkNoErrors(response);
+			JSONObject response = new SlackResponseVerifier().parseResponse(content);
 
 			JSONArray members = response.getJSONArray("members");
 			for (int i = 0; i < members.length(); i++) {
@@ -87,8 +84,7 @@ class SlackOAuthService {
 
 	private String parseChannelIdOfIMUser(String content, String userId) {
 		try {
-			JSONObject response = new JSONObject(content);
-			new SlackResponseVerifier().checkNoErrors(response);
+			JSONObject response = new SlackResponseVerifier().parseResponse(content);
 
 			JSONArray ims = response.getJSONArray("ims");
 			for (int i = 0; i < ims.length(); i++) {

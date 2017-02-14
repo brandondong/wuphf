@@ -8,11 +8,13 @@ class SlackResponseVerifier {
 	/**
 	 * Throws a runtime exception if response contains errors
 	 */
-	public void checkNoErrors(JSONObject response) throws JSONException {
-		if (!response.getBoolean("ok")) {
+	public JSONObject parseResponse(String response) throws JSONException {
+		JSONObject jsonResponse = new JSONObject(response);
+		if (!jsonResponse.getBoolean("ok")) {
 			throw new IllegalStateException(
-					String.format("Slack responded with the following errors: %s.", response.getString("error")));
+					String.format("Slack responded with the following errors: %s.", jsonResponse.getString("error")));
 		}
+		return jsonResponse;
 	}
 
 }

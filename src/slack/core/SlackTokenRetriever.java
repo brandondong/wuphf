@@ -21,8 +21,7 @@ class SlackTokenRetriever {
 
 	private String parseResponse(String content) {
 		try {
-			JSONObject jsonResponse = new JSONObject(content);
-			new SlackResponseVerifier().checkNoErrors(jsonResponse);
+			JSONObject jsonResponse = new SlackResponseVerifier().parseResponse(content);
 			return jsonResponse.getString("access_token");
 		} catch (JSONException e) {
 			throw new IllegalStateException(e);
