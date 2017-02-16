@@ -1,112 +1,91 @@
 package reddit.core;
 
-import static java.util.stream.Collectors.joining;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import core.model.OAuthAppDetails;
 import core.model.Platform;
+import web.service.HttpService;
 
 class RedditTokenRetriever {
 
 	private static final String TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
 
 	public CompletableFuture<RedditToken> getToken(String code) {
-		return CompletableFuture.supplyAsync(() -> {
-			try {
-				byte[] out = transformPostData(getPostParameters(code));
-				JSONObject json = sendPostRequest(out);
-				if (json.has("error")) {
-					throw new IllegalStateException(
-							String.format("Failed to grant permissions: %s.", json.getString("error")));
-				}
-
-				String access = json.getString("access_token");
-				String refresh = json.getString("refresh_token");
-				long expiresIn = json.getLong("expires_in");
-				return RedditToken.expiresIn(access, refresh, expiresIn);
-			} catch (IOException | JSONException e) {
-				throw new IllegalStateException(e);
-			}
-		});
+		HttpPost post = createTokenPost();
+		List<BasicNameValuePair> params = new ArrayList<>();
+		params.add(new BasicNameValuePair("grant_type", "authorization_code"));
+		params.add(new BasicNameValuePair("code", code));
+		params.add(new BasicNameValuePair("redirect_uri", Platform.APP_REDIRECT));
+		try {
+			post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			throw new IllegalStateException(e);
+		}
+		return new HttpService().getResponse(post).thenApply(this::parseAccessResponse);
 	}
 
 	public CompletableFuture<RedditToken> refreshToken(RedditToken token) {
-		return CompletableFuture.supplyAsync(() -> {
-			try {
-				byte[] out = transformPostData(getRefreshPostParameters(token.getRefreshToken()));
-				JSONObject json = sendPostRequest(out);
-				String access = json.getString("access_token");
-				long expiresIn = json.getLong("expires_in");
-				return RedditToken.expiresIn(access, token.getRefreshToken(), expiresIn);
-			} catch (IOException | JSONException e) {
-				throw new IllegalStateException(e);
-			}
-		});
-	}
-
-	private JSONObject sendPostRequest(byte[] out)
-			throws MalformedURLException, IOException, ProtocolException, JSONException {
-		URL url = new URL(TOKEN_URL);
-		HttpURLConnection http = (HttpURLConnection) url.openConnection();
-		http.setRequestMethod("POST");
-		http.setDoOutput(true);
-
-		addHeaders(http);
-		http.setFixedLengthStreamingMode(out.length);
-		http.connect();
-		try (OutputStream os = http.getOutputStream()) {
-			os.write(out);
+		HttpPost post = createTokenPost();
+		List<BasicNameValuePair> params = new ArrayList<>();
+		params.add(new BasicNameValuePair("grant_type", "refresh_token"));
+		params.add(new BasicNameValuePair("refresh_token", token.getRefreshToken()));
+		try {
+			post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			throw new IllegalStateException(e);
 		}
-		String result = new BufferedReader(new InputStreamReader(http.getInputStream())).lines().collect(joining("\n"));
-		return new JSONObject(result);
+		return new HttpService().getResponse(post).thenApply((content) -> parseRefreshResponse(content, token));
 	}
 
-	private void addHeaders(HttpURLConnection http) {
-		http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-		http.setRequestProperty("Authorization", getAuthorizationHeader());
-		http.setRequestProperty("User-agent", "wuphf");
+	private HttpPost createTokenPost() {
+		HttpPost post = new HttpPost(TOKEN_URL);
+		post.addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+		post.addHeader("Authorization", getAuthorizationHeader());
+		post.addHeader("User-agent", "wuphf");
+		return post;
 	}
 
-	private byte[] transformPostData(Map<String, String> parameters) throws UnsupportedEncodingException {
-		StringJoiner sj = new StringJoiner("&");
-		for (Map.Entry<String, String> entry : parameters.entrySet())
-			sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "=" + URLEncoder.encode(entry.getValue(), "UTF-8"));
-		byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
-		return out;
+	private RedditToken parseAccessResponse(String content) {
+		try {
+			JSONObject json = parseResponse(content);
+
+			String access = json.getString("access_token");
+			String refresh = json.getString("refresh_token");
+			long expiresIn = json.getLong("expires_in");
+			return RedditToken.expiresIn(access, refresh, expiresIn);
+		} catch (JSONException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
-	private Map<String, String> getPostParameters(String code) {
-		Map<String, String> params = new HashMap<>();
-		params.put("grant_type", "authorization_code");
-		params.put("code", code);
-		params.put("redirect_uri", Platform.APP_REDIRECT);
-		return params;
+	private RedditToken parseRefreshResponse(String content, RedditToken original) {
+		try {
+			JSONObject json = parseResponse(content);
+
+			String access = json.getString("access_token");
+			long expiresIn = json.getLong("expires_in");
+			return RedditToken.expiresIn(access, original.getRefreshToken(), expiresIn);
+		} catch (JSONException e) {
+			throw new IllegalStateException(e);
+		}
 	}
 
-	private Map<String, String> getRefreshPostParameters(String token) {
-		Map<String, String> params = new HashMap<>();
-		params.put("grant_type", "refresh_token");
-		params.put("refresh_token", token);
-		return params;
+	private JSONObject parseResponse(String content) throws JSONException {
+		JSONObject json = new JSONObject(content);
+		if (json.has("error")) {
+			throw new IllegalStateException(String.format("Failed to grant permissions: %s.", json.getString("error")));
+		}
+		return json;
 	}
 
 	private String getAuthorizationHeader() {
