@@ -4,3 +4,4 @@
 /WebContent/js/
 /src/reddit/core/RedditAppDetails.java
 /src/slack/core/SlackAppDetails.java
+/src/facebook/core/FacebookAppDetails.java

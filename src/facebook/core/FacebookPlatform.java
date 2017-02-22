@@ -3,11 +3,14 @@ package facebook.core;
 import java.util.concurrent.CompletableFuture;
 
 import core.model.Integration;
+import core.model.OAuthAppDetails;
 import core.model.Platform;
 import core.schema.FieldValueMap;
 import core.schema.Fields;
 
 public class FacebookPlatform implements Platform {
+
+	public static final OAuthAppDetails APP_DETAILS = new FacebookAppDetails();
 
 	@Override
 	public String getLabel() {
@@ -42,8 +45,8 @@ public class FacebookPlatform implements Platform {
 
 	@Override
 	public String getLoginRedirectUrl() {
-		// TODO register the app and acquire this
-		return "";
+		return String.format("https://www.facebook.com/v2.8/dialog/oauth?client_id=%s&redirect_uri=%s&state=facebook",
+				APP_DETAILS.getClientId(), Platform.APP_REDIRECT);
 	}
 
 }
