@@ -34,8 +34,7 @@ public class FacebookPlatform implements Platform {
 
 	@Override
 	public CompletableFuture<FieldValueMap> createIntegrationFromRedirect(String code) {
-		// TODO Auto-generated method stub
-		return null;
+		return new FacebookTokenRetriever().retrieveToken(code).thenApply((t) -> null);
 	}
 
 	@Override
