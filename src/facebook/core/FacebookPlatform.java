@@ -4,6 +4,7 @@ import java.util.concurrent.CompletableFuture;
 
 import core.model.Integration;
 import core.model.OAuthAppDetails;
+import core.model.OAuthToken;
 import core.model.Platform;
 import core.schema.FieldValueMap;
 import core.schema.Fields;
@@ -34,7 +35,15 @@ public class FacebookPlatform implements Platform {
 
 	@Override
 	public CompletableFuture<FieldValueMap> createIntegrationFromRedirect(String code) {
-		return new FacebookTokenRetriever().retrieveToken(code).thenApply((t) -> null);
+		return new FacebookTokenRetriever().retrieveToken(code).thenCompose(this::createIntegrationWithToken);
+	}
+
+	private CompletableFuture<FieldValueMap> createIntegrationWithToken(OAuthToken token) {
+		FieldValueMap.Builder map = FieldValueMap.builder(getUserFields())
+				.setField(FacebookFields.ACCESS_TOKEN, token.getAccessToken())
+				.setField(FacebookFields.EXPIRES_AT, token.getExpiryDate());
+		return new FacebookOAuthService(token).getUserFullname()
+				.thenApply((name) -> map.setField(FacebookFields.NAME, name).create());
 	}
 
 	@Override
