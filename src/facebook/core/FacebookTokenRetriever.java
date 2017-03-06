@@ -24,7 +24,7 @@ class FacebookTokenRetriever {
 
 	private OAuthToken parseResponse(String content) {
 		try {
-			JSONObject json = new JSONObject(content);
+			JSONObject json = new FacebookResponseParser().parse(content);
 			String accessToken = json.getString("access_token");
 			long expiresIn = json.getLong("expires_in");
 			return OAuthToken.expiresIn(accessToken, expiresIn);
