@@ -1,5 +1,6 @@
 package facebook.core;
 
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import core.model.Integration;
@@ -55,6 +56,12 @@ public class FacebookPlatform implements Platform {
 	public String getLoginRedirectUrl() {
 		return String.format("https://www.facebook.com/v2.8/dialog/oauth?client_id=%s&redirect_uri=%s&state=facebook",
 				APP_DETAILS.getClientId(), Platform.APP_REDIRECT);
+	}
+
+	@Override
+	public Optional<String> getDescription() {
+		return Optional.of(
+				"The Facebook API currently does not support sending private messages. Messages sent through Wuphf will instead be posted to the user's profile feed.");
 	}
 
 }

@@ -19,6 +19,8 @@ public class PlatformWebModel {
 
 	private List<FieldWebModel> receiverFields;
 
+	private String description;
+
 	/**
 	 * Public constructor for JAXB, use {{@link #createFrom(Platform)} to
 	 * instantiate instead
@@ -27,12 +29,13 @@ public class PlatformWebModel {
 	}
 
 	private PlatformWebModel(String label, String logo, String redirectUrl, List<FieldWebModel> userFields,
-			List<FieldWebModel> receiverFields) {
+			List<FieldWebModel> receiverFields, String description) {
 		this.label = label;
 		this.logo = logo;
 		this.redirectUrl = redirectUrl;
 		this.userFields = userFields;
 		this.receiverFields = receiverFields;
+		this.description = description;
 	}
 
 	/**
@@ -44,7 +47,8 @@ public class PlatformWebModel {
 	public static PlatformWebModel createFrom(Platform platform) {
 		return new PlatformWebModel(platform.getLabel(), platform.getLogoImageLink(), platform.getLoginRedirectUrl(),
 				platform.getUserFields().stream().map(FieldWebModel::createFrom).collect(toList()),
-				platform.getReceiverFields().stream().map(FieldWebModel::createFrom).collect(toList()));
+				platform.getReceiverFields().stream().map(FieldWebModel::createFrom).collect(toList()),
+				platform.getDescription().orElse(null));
 	}
 
 	public String getLabel() {
@@ -85,6 +89,14 @@ public class PlatformWebModel {
 
 	public void setReceiverFields(List<FieldWebModel> receiverFields) {
 		this.receiverFields = receiverFields;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

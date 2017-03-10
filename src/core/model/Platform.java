@@ -1,5 +1,6 @@
 package core.model;
 
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import core.schema.FieldValueMap;
@@ -37,7 +38,6 @@ public interface Platform {
 	Integration createIntegration(FieldValueMap fieldValueMap);
 
 	/**
-	 * 
 	 * @param code
 	 *            code parameter returned from the redirect login
 	 * @return a {@link FieldValueMap} holding the properties for a new
@@ -51,10 +51,17 @@ public interface Platform {
 	String getLogoImageLink();
 
 	/**
-	 * 
 	 * @return the url to login to this platform which will redirect back once
 	 *         authenticated
 	 */
 	String getLoginRedirectUrl();
+
+	/**
+	 * @return a description of this platform and any additional information for
+	 *         the user
+	 */
+	default Optional<String> getDescription() {
+		return Optional.empty();
+	}
 
 }
