@@ -2,6 +2,6 @@
 /target/
 /node_modules/
 /WebContent/js/
-/src/reddit/core/RedditAppDetails.java
-/src/slack/core/SlackAppDetails.java
-/src/facebook/core/FacebookAppDetails.java
+/src/main/java/reddit/core/RedditAppDetails.java
+/src/main/java/slack/core/SlackAppDetails.java
+/src/main/java/facebook/core/FacebookAppDetails.java
